@@ -1508,11 +1508,7 @@ NSLog(@"submit--eee");
         
         
     }
-    
-//    if (checkstatus == NO)
-//    {
-//        [countIndx removeAllObjects];
-//    }
+
     
     int index;
     BOOL gotElement = NO;

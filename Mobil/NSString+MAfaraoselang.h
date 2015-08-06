@@ -65,4 +65,11 @@
 +(NSString *)DeleteF;
 
 +(NSString *)SoviF;
+
++(NSString *)statNameF;
++(NSString *)freeF;
++(NSString *)startDateF;
++(NSString *)endDateF;
++(NSString *)allChildF;
+
 @end

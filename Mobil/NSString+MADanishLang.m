@@ -198,4 +198,24 @@
 {
     return @"Sovet?";
 }
++(NSString *)statNameD
+{
+    return @"";
+}
++(NSString *)freeD
+{
+    return @"Fri";
+}
++(NSString *)startDateD
+{
+    return @"";
+}
++(NSString *)endDateD
+{
+    return @"";
+}
++(NSString *)allChildD
+{
+    return @"";
+}
 @end

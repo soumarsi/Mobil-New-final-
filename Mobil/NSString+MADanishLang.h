@@ -65,4 +65,11 @@
 +(NSString *)DeleteD;
 
 +(NSString *)SoviD;
+
++(NSString *)statNameD;
++(NSString *)freeD;
+
++(NSString *)startDateD;
++(NSString *)endDateD;
++(NSString *)allChildD;
 @end

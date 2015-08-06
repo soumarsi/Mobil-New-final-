@@ -18,6 +18,7 @@
 #import "MANotesViewController.h"
 #import "MAAlbumViewController.h"
 #import "MARegistrationViewController.h"
+#import "MAStatViewController.h"
 #define kOFFSET_FOR_KEYBOARD 290;
 @interface MASecondHomeViewController ()
 
@@ -111,7 +112,7 @@
     [ScondHomeScrollView setScrollEnabled:YES];
     [ScondHomeScrollView setShowsHorizontalScrollIndicator:NO];
     [ScondHomeScrollView setShowsVerticalScrollIndicator:NO];
-    [ScondHomeScrollView setContentSize:CGSizeMake(1024, 800)];
+    [ScondHomeScrollView setContentSize:CGSizeMake(1024, 1020)];
     [ScondHomeView addSubview:ScondHomeScrollView];
     
    
@@ -380,6 +381,38 @@
     [sgsttap8new setNumberOfTouchesRequired:1];
     [PcLblV8 addGestureRecognizer:sgsttap8new];
     
+    
+    
+    UIView *pic9 = [[UIView alloc] initWithFrame:CGRectMake(440, 785,357/2, 357/2)];
+    pic9.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"statictics"]];
+    [ScondHomeScrollView addSubview:pic9];
+    
+    UILabel *PcLblV9 = [[UILabel alloc] initWithFrame:CGRectMake(465, 975, 131, 40)];
+    PcLblV9.backgroundColor = [UIColor clearColor];
+    PcLblV9.layer.borderWidth = 2.0f;
+    PcLblV9.layer.borderColor = [[UIColor colorWithRed:(79.0f / 255.0f) green:(79.0f / 255.0f) blue:(79.0f / 255.0f) alpha:0.7f]CGColor];
+    PcLblV9.layer.cornerRadius = 2.0f;
+    [PcLblV9 setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16]];
+    [PcLblV9 setTextAlignment:NSTextAlignmentCenter];
+    PcLblV9.textColor = [UIColor colorWithRed:(66.0f / 255.0f) green:(66.0f / 255.0f) blue:(66.0f / 255.0f) alpha:0.7f];
+    [ScondHomeScrollView addSubview:PcLblV9];
+    
+    
+    
+    UITapGestureRecognizer *sgsttap9 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gostat)];
+    [sgsttap9 setDelegate:self];
+    [sgsttap9 setNumberOfTapsRequired:1];
+    [sgsttap9 setNumberOfTouchesRequired:1];
+    [pic9 addGestureRecognizer:sgsttap9];
+    
+    
+    UITapGestureRecognizer *sgsttap9new = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gostat)];
+    [sgsttap9new setDelegate:self];
+    [sgsttap9new setNumberOfTapsRequired:1];
+    [sgsttap9new setNumberOfTouchesRequired:1];
+    [PcLblV9 addGestureRecognizer:sgsttap9new];
+
+    
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
     {
             [logout setTitle:[NSString LogoutF] forState:UIControlStateNormal];
@@ -394,6 +427,7 @@
         [PcLblV6 setText:[NSString NewsF]];
         [PcLblV7 setText:[NSString NotesF]];
         [PcLblV8 setText:[NSString GalleryF]];
+        [PcLblV9 setText:[NSString statNameF]];
     }
     else
     {
@@ -409,6 +443,7 @@
         [PcLblV6 setText:[NSString NewsD]];
         [PcLblV7 setText:[NSString NotesD]];
         [PcLblV8 setText:[NSString GalleryD]];
+        [PcLblV9 setText:[NSString statNameD]];
     }
    // [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(updateNewDate) userInfo:nil repeats:YES];
     
@@ -882,6 +917,11 @@
 {
     MARegistrationViewController *Registration = [[MARegistrationViewController alloc]init];
     [self.navigationController pushViewController:Registration animated:NO];
+}
+-(void)gostat
+{
+    MAStatViewController *vc = [[MAStatViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:NO];
 }
 - (void)didReceiveMemoryWarning
 {

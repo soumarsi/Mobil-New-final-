@@ -82,6 +82,7 @@
 		2C836FB81AC18899000A18CB /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C836FAC1AC18899000A18CB /* Overlay.png */; };
 		2C836FB91AC18899000A18CB /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C836FAD1AC18899000A18CB /* Overlay@2x.png */; };
 		2CCF28151ABFF69B00BA1072 /* MARegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF28141ABFF69B00BA1072 /* MARegistrationViewController.m */; };
+		2CFDD0DA1B6632E100095FF4 /* MAStatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFDD0D91B6632E100095FF4 /* MAStatViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -235,6 +236,8 @@
 		2C836FAD1AC18899000A18CB /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
 		2CCF28131ABFF69B00BA1072 /* MARegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MARegistrationViewController.h; sourceTree = "<group>"; };
 		2CCF28141ABFF69B00BA1072 /* MARegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MARegistrationViewController.m; sourceTree = "<group>"; };
+		2CFDD0D81B6632E100095FF4 /* MAStatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAStatViewController.h; sourceTree = "<group>"; };
+		2CFDD0D91B6632E100095FF4 /* MAStatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAStatViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +319,8 @@
 				2C7306CF1ABACE2100A6617A /* MAAlbumViewController.m */,
 				2C836F5D1AC12934000A18CB /* MAAlbumDetailsViewController.h */,
 				2C836F5E1AC12934000A18CB /* MAAlbumDetailsViewController.m */,
+				2CFDD0D81B6632E100095FF4 /* MAStatViewController.h */,
+				2CFDD0D91B6632E100095FF4 /* MAStatViewController.m */,
 				2CCF28131ABFF69B00BA1072 /* MARegistrationViewController.h */,
 				2CCF28141ABFF69B00BA1072 /* MARegistrationViewController.m */,
 				2C562FD51AF0D91800BADC62 /* NSString+MAfaraoselang.h */,
@@ -594,6 +599,7 @@
 				2C6F21691ABC250F0064831A /* RTSpinKit9CubeGridAnimation.m in Sources */,
 				2C3C2DEF1AB960FA00A4A8A2 /* MASecondHomeViewController.m in Sources */,
 				2C3C2E1F1AB961C300A4A8A2 /* SDWebImagePrefetcher.m in Sources */,
+				2CFDD0DA1B6632E100095FF4 /* MAStatViewController.m in Sources */,
 				2C836FAE1AC18899000A18CB /* ELCAlbumPickerController.m in Sources */,
 				2C3C2E1E1AB961C300A4A8A2 /* SDWebImageManager.m in Sources */,
 				2C3C2E2D1AB961DE00A4A8A2 /* SVProgressHUD.m in Sources */,

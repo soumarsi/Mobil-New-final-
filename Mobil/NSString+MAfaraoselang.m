@@ -193,4 +193,24 @@
 {
     return @"Sovi?";
 }
++(NSString *)statNameF
+{
+    return @"Hagtøl Børn";
+}
++(NSString *)freeF
+{
+    return @"Frí";
+}
++(NSString *)startDateF
+{
+    return @"Vel Dato Frá";
+}
++(NSString *)endDateF
+{
+    return @"Vel Dato Til";
+}
++(NSString *)allChildF
+{
+    return @"Øll Børn";
+}
 @end
