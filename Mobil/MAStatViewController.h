@@ -11,7 +11,22 @@
 @interface MAStatViewController : UIViewController<UIPickerViewDataSource,UIPickerViewDelegate>
 {
     NSString *DataString;
-    NSString *globalString,*startdateString,*enddateString;
+    NSString *globalString,*startdateString,*enddateString,*childid;
+    
+    NSMutableArray *dataarray;
+    UIView *backView;
+    UILabel *sick;
+    NSString *free_number;
+    NSString *sick_Days;
+    NSString *absent_dates;
+    NSString *Free_Days;
+    UILabel *notArrived;
+    NSMutableArray *sickArray;
+    UILabel *notArrivedText;
+    UILabel *sickText;
+    UILabel *Free;
+    NSMutableArray *freearray;
+    UILabel *freeText;
 }
 
 
@@ -28,4 +43,5 @@
 @property (nonatomic, strong) UIButton *childPickerCancelButton;
 @property (nonatomic, strong) NSMutableArray *childArray;
 @property (strong, nonatomic) UIDatePicker *date_picker;
+@property (strong,readwrite) NSMutableArray *globalArray;
 @end

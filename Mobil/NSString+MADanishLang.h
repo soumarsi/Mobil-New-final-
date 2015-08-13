@@ -72,4 +72,8 @@
 +(NSString *)startDateD;
 +(NSString *)endDateD;
 +(NSString *)allChildD;
++(NSString *)totalTimeD;
++(NSString *)sickD;
++(NSString *)notArrivedD;
++(NSString *) NodayD;
 @end

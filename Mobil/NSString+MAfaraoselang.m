@@ -213,4 +213,20 @@
 {
     return @"Øll Børn";
 }
++(NSString *)totalTimeF
+{
+    return @"Tímar íalt";
+}
++(NSString *)sickF
+{
+    return @"Sjúk/ur";
+}
++(NSString *)notArrivedF
+{
+    return @"Ikki komin";
+}
++(NSString *) NodayF
+{
+    return @"Dag/ar!";
+}
 @end

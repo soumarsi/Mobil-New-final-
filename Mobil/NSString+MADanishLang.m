@@ -218,4 +218,20 @@
 {
     return @"";
 }
++(NSString *)totalTimeD
+{
+    return @"";
+}
++(NSString *)sickD
+{
+    return @"";
+}
++(NSString *)notArrivedD
+{
+    return @"";
+}
++(NSString *) NodayD
+{
+    return @"";
+}
 @end

@@ -32,6 +32,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+
+    
     _mainView =[[UIView alloc]initWithFrame:CGRectMake(226, 0, 798,1536/2)];
     _mainView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bgkomin.png"]];
     [self.view addSubview:_mainView];
@@ -100,7 +102,7 @@
     [_mainView addSubview:pageTitle];
     
     
-    _checkBox = [[UIButton alloc]initWithFrame:CGRectMake(35, 163, 22, 21)];
+    _checkBox = [[UIButton alloc]initWithFrame:CGRectMake(32, 163,26,25)];
     [_checkBox setBackgroundColor:[UIColor clearColor]];
     [_checkBox setBackgroundImage:[UIImage imageNamed:@"chknr"] forState:UIControlStateNormal];
     [_checkBox setBackgroundImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateHighlighted];
@@ -144,6 +146,7 @@
     _searchButton.layer.cornerRadius =3.0f;
     [_searchButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_searchButton.titleLabel setFont:[UIFont fontWithName:GLOBALTEXTFONT size:18]];
+    [_searchButton addTarget:self action:@selector(searchChild:) forControlEvents:UIControlEventTouchUpInside];
     [_mainView addSubview:_searchButton];
     
     
@@ -194,18 +197,9 @@
     [_childPickerCancelButton setHidden:YES];
     
     
-    
-    _date_picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(300, 568.0f+50.0f, 424, 260)];
-    _date_picker.datePickerMode = UIDatePickerModeDate;
-    _date_picker.hidden = YES;
-    [_date_picker addTarget:self
-                     action:@selector(LabelChange:)
-           forControlEvents:UIControlEventValueChanged];
-  //
-    [self.view addSubview:_date_picker];
-
+ 
     _childArray = [[NSMutableArray alloc]init];
-    
+    NSLog(@"_childarray-- %@", _childArray);
     //childlist api fire:
     
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -216,14 +210,30 @@
         
         NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"%@all_childlist.php?room_id=%@&SubDomainId=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]]];
         
+        NSLog(@"childstring-- %@", [NSString stringWithFormat:@"%@all_childlist.php?room_id=%@&SubDomainId=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]]);
+        
         NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
                                                         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                             if(error == nil)
                                                             {
-                                                                _childArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                                
+                                                              NSMutableDictionary *childdictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                                
+                                                             
+                                                                NSMutableDictionary  *dict = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",[NSString allChildF]],@"name",@"",@"id", nil];
+                                                                
+                                                                NSLog(@"newdictionary-=-=-=-= %@", childdictionary);
+                                                                
+                                                                 [_childArray addObject:dict];
+                                                                
+                                                                for (NSDictionary *innerdict in childdictionary)
+                                                                    
+                                                                [_childArray addObject:innerdict];
+                                                               
+                                                                NSLog(@"_childarray-- %@", _childArray);
+                                                                
                                                                 [_childPicker reloadAllComponents];
                                                             }
-                                                            
                                                         }];
         
         [dataTask resume];
@@ -328,6 +338,8 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:YES];
     
+        _globalArray = [[NSMutableArray alloc]init];
+    
     [self callPulseLoaderView:CGRectMake(80, 180, 40, 40) view:self.view];
     [self.view bringSubviewToFront:pulseLoaderView];
     pulseLoaderView.center = self.view.center;
@@ -348,7 +360,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *urlString;
             
-            urlString = [NSString stringWithFormat:@"%@born_list.php?room_id=%@&admin_id=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]];
+            urlString = [NSString stringWithFormat:@"%@kidstatistic.php?room_id=%@&admin_id=%@&start_date=&end_date=&child_id=&free_chk=",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]];
             
             
             NSLog(@" %@",urlString);
@@ -364,9 +376,43 @@
                 [data_retrived addObject:dict];
                 
             }
+            for (int k = 0;k< data_retrived.count; k++)
+            {
+                NSMutableArray *innerArray = [[NSMutableArray alloc]init];
+                
+                //   [_globalArray addObject:[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"]];
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] objectAtIndex:ij]];
+                }
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] objectAtIndex:ij]];
+                }
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] objectAtIndex:ij]];
+                }
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] objectAtIndex:ij]];
+                }
+                
+                [_globalArray addObject:innerArray];
+                //[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"]]
+            }
+            
+            NSLog(@"_globalArray--- %lu", (unsigned long)_globalArray.count);
+            
             copyArray = [data_retrived mutableCopy];
             if([copyArray count] > 0){
-                
                 
                 NSLog(@"==data..%@",copyArray);
                 float thgt = [copyArray count]*140;
@@ -386,13 +432,13 @@
                 [FindUser setShowsVerticalScrollIndicator:NO];
                 FindUser.separatorColor = [UIColor clearColor];
                 
-                //[_mainView addSubview:FindUser];
+                [_mainView addSubview:FindUser];
                 [FindUser reloadData];
                 
             }else{
                 [self removePulseLoader];
                 
-                UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(30, 210, 798-60, 108)];
+                backView = [[UIView alloc] initWithFrame:CGRectMake(30, 210, 798-60, 108)];
                 backView.backgroundColor = [UIColor whiteColor];
                 [_mainView addSubview:backView];
                 
@@ -423,16 +469,16 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 140;
+    NSLog(@"indexpath--- %ld--=-=--=--= %@", [[_globalArray objectAtIndex:indexPath.row] count],[_globalArray objectAtIndex:indexPath.row]);
+    
+    return [[_globalArray objectAtIndex:indexPath.row] count]*20+180;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
     return [copyArray count];
-    
     
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -446,12 +492,13 @@
     [[cell backgroundView] setBackgroundColor:[UIColor clearColor]];
     [cell setBackgroundColor:[UIColor clearColor]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 798-60, 128)];
+    backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 798-60, [[_globalArray objectAtIndex:indexPath.row] count]*20+170)];
     backView.backgroundColor = [UIColor whiteColor];
     [cell addSubview:backView];
     
-    
+
     UIImage *plcHol;
     
     if([[NSString stringWithFormat:@"%@",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"gender" ]]  isEqual: @"M"]){
@@ -508,148 +555,311 @@
     {
         NameTxt.frame = CGRectMake(140, 20+23-14, 200, 20);
     }
-    
-    UILabel *FDato = [[UILabel alloc] initWithFrame:CGRectMake(140, 64, 200, 20)];
-    FDato.text = @"F.Dato";
-    FDato.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
-    FDato.textColor = [UIColor lightGrayColor];
-    FDato.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:FDato];
-    
-    
-    UILabel *FDatoTxt = [[UILabel alloc] initWithFrame:CGRectMake(140, 84, 230, 20)];
-    FDatoTxt.backgroundColor = [UIColor clearColor];
-    FDatoTxt.text = [[copyArray objectAtIndex:indexPath.row]objectForKey:@"date_of_birth" ];
-    FDatoTxt.font =  [UIFont fontWithName:GLOBALTEXTFONT size:14];
-    FDatoTxt.textColor = [UIColor blackColor];
-    //FDatoTxt.numberOfLines = 2;
-    FDatoTxt.lineBreakMode=NSLineBreakByWordWrapping;
-    [backView addSubview:FDatoTxt];
+ 
+    UILabel *totalTime = [[UILabel alloc] initWithFrame:CGRectMake(140, 64, 200, 20)];
+    totalTime.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+    totalTime.textColor = [UIColor lightGrayColor];
+    totalTime.textAlignment = NSTextAlignmentLeft;
+    [backView addSubview:totalTime];
     
     
+    UILabel *totalTimeTxt = [[UILabel alloc] initWithFrame:CGRectMake(140, 84, 230, 20)];
+    totalTimeTxt.backgroundColor = [UIColor clearColor];
+    //FDatoTxt.text = [[copyArray objectAtIndex:indexPath.row]objectForKey:@"date_of_birth" ];
+    totalTimeTxt.font =  [UIFont fontWithName:GLOBALTEXTFONT size:14];
+    totalTimeTxt.textColor = [UIColor blackColor];
+    totalTimeTxt.lineBreakMode=NSLineBreakByWordWrapping;
+    [backView addSubview:totalTimeTxt];
     
     
-    UIView *dev = [[UIView alloc] initWithFrame:CGRectMake(310+60, 13, 1, 164/2+20)];
+    NSString *hourCheck=[NSString stringWithFormat:@"%@",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
+    
+    if ([hourCheck isEqualToString:@"0"])
+    {
+        totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
+
+    }
+    else
+    {
+        totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar %@ Min %@ Sek",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totminutes"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totsec"]];
+
+    }
+    
+    
+    
+    
+    
+    UIView *dev = [[UIView alloc] initWithFrame:CGRectMake(310, 13, 1, 164/2+20)];
     dev.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"div"]];
     [backView addSubview:dev];
     
+    ///=====/////////===============
     
-    UILabel *parent = [[UILabel alloc] initWithFrame:CGRectMake(340+50, 20-12, 180, 20)];
-    parent.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
-    parent.textColor = [UIColor lightGrayColor];
-    parent.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:parent];
-    
-    NSUInteger characterCount1 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"parent_name" ] length];
-    
-    UILabel *parentTxt = [[UILabel alloc] init];
-    if([[copyArray objectAtIndex:indexPath.row]objectForKey:@"parent_name"] != [NSNull null]){
-        
-        parentTxt.text = [[copyArray objectAtIndex:indexPath.row]objectForKey:@"parent_name" ];
-        
-    }
-    parentTxt.font =  [UIFont fontWithName:GLOBALTEXTFONT size:14];
-    parentTxt.textColor = [UIColor blackColor];
-    
-    parentTxt.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:parentTxt];
-    
-    if (characterCount1 > 26)
+    if ([_checkBox isSelected])
     {
-        parentTxt.frame = CGRectMake(340+50, 20+23-14, 180, 40);
-        parentTxt.numberOfLines = 2;
+        
+        Free = [[UILabel alloc] initWithFrame:CGRectMake(340,8, 150, 20)];
+        Free.font =[UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+        Free.textColor = [UIColor lightGrayColor];
+        Free.textAlignment = NSTextAlignmentLeft;
+        Free.backgroundColor=[UIColor clearColor];
+        [backView addSubview:Free];
+        
+        freearray=[[NSMutableArray alloc]init];
+        freearray=[[copyArray objectAtIndex:indexPath.row]objectForKey:@"fri_days"];
+        Free_Days = [freearray componentsJoinedByString:@" "];
+        
+        freeText = [[UILabel alloc]init];
+        [freeText setBackgroundColor:[UIColor clearColor]];
+        [freeText setTextAlignment:NSTextAlignmentLeft];
+        [freeText setTextColor:[UIColor blackColor]];
+        freeText.numberOfLines = [freearray count];
+        [freeText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:19.0f]];
+        [backView addSubview:freeText];
+        
+        if (freearray.count == 0)
+        {
+            freeText.frame = CGRectMake(340, Free.frame.origin.y+Free.frame.size.height+5, 180, 20);
+        }
+        else
+        {
+            freeText.frame = CGRectMake(340, Free.frame.origin.y+15, 100, [freearray count]*20+70);
+        }
+
+    }
+   else
+   {
+    sick = [[UILabel alloc] initWithFrame:CGRectMake(340, 20-12, 180, 20)];
+    sick.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+    sick.textColor = [UIColor lightGrayColor];
+    sick.textAlignment = NSTextAlignmentLeft;
+    [backView addSubview:sick];
+    
+    sickArray=[[NSMutableArray alloc]init];
+    sickArray=[[copyArray objectAtIndex:indexPath.row]objectForKey:@"sick_days"];
+    sick_Days = [sickArray componentsJoinedByString:@" "];
+    
+  
+    sickText = [[UILabel alloc]init];
+    [sickText setBackgroundColor:[UIColor clearColor]];
+    [sickText setTextAlignment:NSTextAlignmentLeft];
+    [sickText setTextColor:[UIColor blackColor]];
+    [sickText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16.5]];
+    [backView addSubview:sickText];
+    
+    if (sickArray.count == 0)
+    {
+        sickText.frame = CGRectMake(340, sick.frame.origin.y+sick.frame.size.height+5, 180, 20);
     }
     else
     {
-        parentTxt.frame = CGRectMake(340+50, 20+23-14, 180, 20);
+         sickText.frame = CGRectMake(340, sick.frame.origin.y+sick.frame.size.height+15, 180, [sickArray  count]*18);
     }
+   
+    
+    notArrived = [[UILabel alloc] initWithFrame:CGRectMake(340,sickText.frame.origin.y+sickText.frame.size.height+10, 200, 20)];
+    notArrived.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+    notArrived.textColor = [UIColor lightGrayColor];
+    notArrived.textAlignment = NSTextAlignmentLeft;
+    [backView addSubview:notArrived];
+    
+    dataarray=[[NSMutableArray alloc]init];
+    dataarray=[[copyArray objectAtIndex:indexPath.row]objectForKey:@"not_arrive_days"];
+    absent_dates = [dataarray componentsJoinedByString:@" "];
     
     
-    UILabel *Add = [[UILabel alloc] initWithFrame:CGRectMake(340+50, 64, 200, 20)];
-    Add.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
-    Add.textColor = [UIColor lightGrayColor];
-    Add.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:Add];
+    notArrivedText = [[UILabel alloc]init];
+    [notArrivedText setBackgroundColor:[UIColor clearColor]];
+    [notArrivedText setTextAlignment:NSTextAlignmentLeft];
+    [notArrivedText setTextColor:[UIColor blackColor]];
+    notArrivedText.numberOfLines = [dataarray count];
+    [notArrivedText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16.5f]];
+    [backView addSubview:notArrivedText];
+
     
-    
-    NSUInteger characterCount2 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"address" ] length];
-    
-    UILabel *AddTxt = [[UILabel alloc] init];
-    if([[copyArray objectAtIndex:indexPath.row]objectForKey:@"address"] != [NSNull null]){
-        
-        AddTxt.text = [[copyArray objectAtIndex:indexPath.row]objectForKey:@"address" ];
-        
-        //
-    }
-    
-    AddTxt.lineBreakMode = NSLineBreakByWordWrapping;
-    AddTxt.font = [UIFont fontWithName:GLOBALTEXTFONT size:14];
-    AddTxt.textColor = [UIColor blackColor];
-    AddTxt.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:AddTxt];
-    
-    if(characterCount2 > 26)
+    if (dataarray.count == 0)
     {
-        AddTxt.frame =CGRectMake(340+50, 84, 180, 40);
-        AddTxt.numberOfLines = 2;
+        notArrivedText.frame = CGRectMake(340, notArrived.frame.origin.y+notArrived.frame.size.height+5, 180, 20);
     }
     else
     {
-        AddTxt.frame =CGRectMake(340+50, 84, 180, 20);
+        notArrivedText.frame = CGRectMake(340, notArrived.frame.origin.y+20, 100, [dataarray count]*20);
     }
     
+
+    Free = [[UILabel alloc] initWithFrame:CGRectMake(340,notArrivedText.frame.origin.y+notArrivedText.frame.size.height+5, 150, 20)];
+    Free.font =[UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+    Free.textColor = [UIColor lightGrayColor];
+    Free.textAlignment = NSTextAlignmentLeft;
+    Free.backgroundColor=[UIColor clearColor];
+    [backView addSubview:Free];
+ 
+    freearray=[[NSMutableArray alloc]init];
+    freearray=[[copyArray objectAtIndex:indexPath.row]objectForKey:@"fri_days"];
+    Free_Days = [freearray componentsJoinedByString:@" "];
     
-    UIView *dev1 = [[UIView alloc] initWithFrame:CGRectMake(510+60, 13, 1, 164/2+20)];
+    freeText = [[UILabel alloc]init];
+    [freeText setBackgroundColor:[UIColor clearColor]];
+    [freeText setTextAlignment:NSTextAlignmentLeft];
+    [freeText setTextColor:[UIColor blackColor]];
+    freeText.numberOfLines = [freearray count];
+    [freeText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16.5f]];
+    [backView addSubview:freeText];
+    
+    if (freearray.count == 0)
+    {
+        freeText.frame = CGRectMake(340, Free.frame.origin.y+Free.frame.size.height+5, 180, 20);
+    }
+    else
+    {
+        freeText.frame = CGRectMake(340, Free.frame.origin.y+20, 100, [freearray count]*20);
+    }
+   }
+
+    UIView *dev1 = [[UIView alloc] initWithFrame:CGRectMake(510, 13, 1, [[_globalArray objectAtIndex:indexPath.row] count]*20+165)];
     dev1.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"div"]];
     [backView addSubview:dev1];
     
-    
-    UILabel *phone = [[UILabel alloc] initWithFrame:CGRectMake(565+30, 8, 200, 20)];
-    phone.font =[UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
-    phone.textColor = [UIColor lightGrayColor];
-    phone.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:phone];
-    
-    if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
-    {
-        parent.text = [NSString ParentChildF];
-        Add.text = [NSString ParentAdressF];
-        phone.text = [NSString TelephoneF];
-    }
-    else
-    {
-        parent.text = [NSString ParentChildD];
-        Add.text = [NSString ParentAdressD];
-        phone.text = [NSString TelephoneD];
-    }
-    
-    
-    UIView *phn = [[UIView alloc]initWithFrame:CGRectMake(565+30, 34, 25/2, 35/2)];
-    phn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"phone"]];
-    [backView addSubview:phn];
-    
-    NSString *str = [NSString stringWithFormat:@"%@",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"parent_phone" ]];
-    //NSString *newStr = [str substringWithRange:NSMakeRange(4, [str length]-4)];
-    
-    UILabel *phoneTxt = [[UILabel alloc] initWithFrame:CGRectMake(585+30, 34, 150, 35/2)];
-    if([[copyArray objectAtIndex:indexPath.row]objectForKey:@"parent_phone"] != [NSNull null]){
-        
-        phoneTxt.text = str;
-        
-    }
-    phoneTxt.numberOfLines = 2;
-    phoneTxt.lineBreakMode = NSLineBreakByWordWrapping;
-    phoneTxt.font =  [UIFont fontWithName:GLOBALTEXTFONT size:16];
-    phoneTxt.textColor = [UIColor blackColor];
-    phoneTxt.textAlignment = NSTextAlignmentLeft;
-    [backView addSubview:phoneTxt];
-    
+    UILabel *komin = [[UILabel alloc] initWithFrame:CGRectMake(540, 8, 200, 20)];
+    komin.font =[UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
+    komin.textColor = [UIColor lightGrayColor];
+    komin.textAlignment = NSTextAlignmentLeft;
+    [backView addSubview:komin];
     
     
 
-    
-    
-    
+    NSMutableArray *komin_array=[[NSMutableArray alloc]init];
+    komin_array=[[copyArray objectAtIndex:indexPath.row]objectForKey:@"in_arrive_days"];
+    NSString *komin_time = [komin_array componentsJoinedByString:@" "];
+
+   
+    UILabel *komin_status1 = [[UILabel alloc] init];
+    komin_status1.font =[UIFont fontWithName:GLOBALTEXTFONT_Light size:16.5];
+    komin_status1.textColor = [UIColor blackColor];
+    komin_status1.textAlignment = NSTextAlignmentLeft;
+    [backView addSubview:komin_status1];
+     komin_status1.frame = CGRectMake(540, komin.frame.origin.y+komin.frame.size.height+5, 180, 20);
+ 
+
+
+    if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+    {
+        totalTime.text = [NSString totalTimeF];
+        sick.text = [NSString sickF];
+        notArrived.text = [NSString notArrivedF];
+        komin.text=[NSString KominF];
+        if (sickArray.count == 0)
+        {
+            sickText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayF]];
+        }
+        else
+        {
+            sickText.text = sick_Days;
+        }
+        
+        
+        if (dataarray.count == 0)
+        {
+            notArrivedText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayF]];
+        }
+        else
+        {
+            notArrivedText.text = absent_dates;
+        }
+        
+        if (freearray.count == 0)
+        {
+            freeText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayF]];
+        }
+        else
+        {
+            freeText.text = Free_Days;
+        }
+        Free.text = [NSString freeF];
+        
+        
+        if (komin_array.count==0)
+        {
+            komin_status1.text=[NSString notArrivedF];
+        }
+        else
+        {
+            NSString *new_time = [komin_time stringByReplacingOccurrencesOfString: @"###" withString:@" , "];
+            
+            NSString *new_time2 = [new_time stringByReplacingOccurrencesOfString: @"##" withString:@" \n "];
+            
+            
+            UILabel *komin_status=[[UILabel alloc]initWithFrame:CGRectMake(540,komin.frame.origin.y+komin.frame.size.height+5, 180, [komin_array count]*40)];
+            komin_status.font = [UIFont fontWithName:GLOBALTEXTFONT size:16.5f];
+            komin_status.text=new_time2;
+            komin_status.backgroundColor=[UIColor clearColor];
+            [backView addSubview:komin_status];
+            komin_status.numberOfLines = [komin_array count]*2;
+            
+            
+            
+        }
+    }
+    else
+    {
+        
+        totalTime.text = [NSString totalTimeD];
+        sick.text = [NSString sickD];
+        notArrived.text = [NSString notArrivedD];
+        komin.text=[NSString KominD];
+        
+        if (sickArray.count == 0)
+        {
+            sickText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayD]];
+        }
+        else
+        {
+            sickText.text = sick_Days;
+        }
+        
+        if (dataarray.count == 0)
+        {
+            notArrivedText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayD]];
+        }
+        else
+        {
+            notArrivedText.text = absent_dates;
+        }
+        
+        if (freearray.count == 0)
+        {
+            freeText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayD]];
+        }
+        else
+        {
+            freeText.text = Free_Days;
+        }
+         Free.text = [NSString freeD];
+        
+        if (komin_array.count==0)
+        {
+            komin_status1.text=[NSString notArrivedF];
+        }
+        else
+        {
+            NSString *new_time = [komin_time stringByReplacingOccurrencesOfString: @"###" withString:@" , "];
+            
+            NSString *new_time2 = [new_time stringByReplacingOccurrencesOfString: @"##" withString:@" \n "];
+            
+            
+            UILabel *komin_status=[[UILabel alloc]initWithFrame:CGRectMake(540,komin.frame.origin.y+komin.frame.size.height+5, 180, [komin_array count]*40)];
+            komin_status.font = [UIFont fontWithName:GLOBALTEXTFONT size:16.5f];
+            komin_status.text=new_time2;
+            komin_status.backgroundColor=[UIColor clearColor];
+            [backView addSubview:komin_status];
+            komin_status.numberOfLines = [komin_array count]*2;
+            
+            
+            
+        }
+
+    }
+
     return cell;
     
 }
@@ -721,8 +931,8 @@
 {
     
     [_childPicker selectRow:0 inComponent:0 animated:NO];
-     DataString = [NSString stringWithFormat:@"%@",[[self.childArray objectAtIndex:[_childPicker selectedRowInComponent:0]] objectForKey:@"name"]];
-    
+     DataString = [NSString stringWithFormat:@"%@",[NSString allChildF]];
+    childid = @"";
     globalString = @"child";
     
     [_blackView setHidden:NO];
@@ -746,14 +956,22 @@
         [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
         [_childPicker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
         
-    } completion:^(BOOL finished) {
-        
+    } completion:^(BOOL finished)
+    {
+       
     }];
     
 }
 
 -(void)startDate:(UIButton *)sender
 {
+    
+    _date_picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(300, 568.0f+50.0f, 424, 260)];
+    _date_picker.datePickerMode = UIDatePickerModeDate;
+    [_date_picker addTarget:self
+                     action:@selector(LabelChange:)
+           forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_date_picker];
  
     _date_picker.date = [NSDate date];
     _date_picker.maximumDate = [NSDate date];
@@ -786,11 +1004,23 @@
 -(void)endDate:(UIButton *)sender
 {
    
-    NSDate *now = _date_picker.date;
+    _date_picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(300, 568.0f+50.0f, 424, 260)];
+    _date_picker.datePickerMode = UIDatePickerModeDate;
+    [_date_picker addTarget:self
+                     action:@selector(LabelChange:)
+           forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_date_picker];
+    
+   
+    NSDate *dateFromString = [[NSDate alloc] init];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+    dateFromString = [dateFormatter dateFromString:startdateString];
     int daysToAdd = 0;
-    NSDate *newDate1 = [now dateByAddingTimeInterval:60*60*24*daysToAdd];
+    NSDate *newDate1 = [dateFromString dateByAddingTimeInterval:60*60*24*daysToAdd];
     
     [_date_picker setMinimumDate:newDate1];
+
    
     globalString = @"enddate";
     
@@ -971,13 +1201,19 @@
         //retval.font = [UIFont fontWithName:GLOBALTEXTFONT size:19];
         retval.textAlignment= NSTextAlignmentCenter;
         retval.textColor = [UIColor blackColor];
+
         retval.text = [NSString stringWithFormat:@"%@",[[self.childArray objectAtIndex:row] objectForKey:@"name"]];
+  
         return retval;
         
     }
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return 50.0f;
+    
+    
+    return 90.0f;
+
+    
 }
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
@@ -991,11 +1227,236 @@
 }
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-           DataString = [NSString stringWithFormat:@"%@",[[self.childArray objectAtIndex:[_childPicker selectedRowInComponent:component]] objectForKey:@"name"]];
+    
+    
+        DataString = [NSString stringWithFormat:@"%@",[[self.childArray objectAtIndex:[_childPicker selectedRowInComponent:component]] objectForKey:@"name"]];
         
-        //orderID = [[self.orderArrayDropdown objectAtIndex:[oxfordPicker selectedRowInComponent:component]] objectForKey:@"event_id"];
+        childid = [[self.childArray objectAtIndex:[_childPicker selectedRowInComponent:component]] objectForKey:@"id"];
+ 
+    
 }
 
+//search child
+-(void)searchChild:(UIButton *)sender
+{
+    [_globalArray removeAllObjects];
+    
+    NSLog(@" Test Ok >>>>>>>>%@",childid);
+    
+    if (childid.length == 0 && startdateString.length==0 && enddateString.length==0)
+    {
+        childid=@"";
+        
+        startdateString=@"";
+        
+        enddateString=@"";
+        
+        if ([_checkBox isSelected])
+        {
+            free_number=@"1";
+        }
+        else
+        {
+            free_number=@"";
+        }
+    }
+    else if (childid.length == 0 && startdateString.length==0 )
+    {
+        childid=@"";
+        
+        startdateString=@"";
+        
+        enddateString=@"";
+
+        if ([_checkBox isSelected])
+        {
+            free_number=@"1";
+        }
+        else
+        {
+            free_number=@"";
+        }
+
+    }
+    else if (childid.length == 0)
+    {
+        childid=@"";
+        
+        if ([_checkBox isSelected])
+        {
+            free_number=@"1";
+        }
+        else
+        {
+            free_number=@"";
+        }
+
+    }
+    else
+    {
+        startdateString=@"";
+        
+        enddateString=@"";
+        
+        free_number=@"";
+    }
+ 
+    NSLog(@"childis---- %@", childid);
+    
+    [self callPulseLoaderView:CGRectMake(80, 180, 40, 40) view:self.view];
+    [self.view bringSubviewToFront:pulseLoaderView];
+    pulseLoaderView.center = self.view.center;
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleCircle
+               backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]
+                         label:@"Circle"];
+    data_retrived = [[NSMutableArray alloc] init];
+    copyArray = [[NSMutableArray alloc] init];
+    //    searchResults = [[NSArray alloc] init];
+    
+    
+    dispatch_queue_t queue = dispatch_queue_create("com.example.MyQueue", NULL);
+    dispatch_async(queue, ^{
+        // Do some computation here.
+        
+        // Update UI after computation.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *urlString;
+            
+            urlString = [NSString stringWithFormat:@"%@kidstatistic.php?room_id=%@&admin_id=%@&start_date=%@&end_date=%@&child_id=%@&free_chk=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"],startdateString,enddateString,childid,free_number];
+            
+            
+            NSLog(@" %@",urlString);
+            NSURL *requestURL = [NSURL URLWithString:urlString];
+            NSError* error = nil;
+            NSLog(@"%@", urlString);
+            NSData *signeddataURL =  [NSData dataWithContentsOfURL:requestURL options:NSDataReadingUncached error:&error];
+            
+            NSMutableDictionary *result = [NSJSONSerialization JSONObjectWithData:signeddataURL options:kNilOptions error:&error];
+            
+            for(NSMutableDictionary *dict in result)
+            {
+                [data_retrived addObject:dict];
+                
+            }
+            
+            if ([_checkBox isSelected])
+            {
+                for (int k = 0;k< data_retrived.count; k++)
+                {
+                    NSMutableArray *innerArray = [[NSMutableArray alloc]init];
+        
+                    if (![[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] isKindOfClass:[NSNull class]])
+                    {
+                        for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] count]; ij++)
+                            [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] objectAtIndex:ij]];
+                    }
+                    if (![[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] isKindOfClass:[NSNull class]])
+                    {
+                        for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] count]; ij++)
+                            [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] objectAtIndex:ij]];
+                    }
+                    
+                    [_globalArray addObject:innerArray];
+                }
+            }
+            else
+            {
+            for (int k = 0;k< data_retrived.count; k++)
+            {
+                NSMutableArray *innerArray = [[NSMutableArray alloc]init];
+
+             //   [_globalArray addObject:[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"]];
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] count]; ij++)
+                    [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"not_arrive_days"] objectAtIndex:ij]];
+                }
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"] objectAtIndex:ij]];
+                }
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"in_arrive_days"] objectAtIndex:ij]];
+                }
+                
+                if (![[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] isKindOfClass:[NSNull class]])
+                {
+                    for (int ij = 0; ij < [[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] count]; ij++)
+                        [innerArray addObject:[[[data_retrived objectAtIndex:k]objectForKey:@"sick_days"] objectAtIndex:ij]];
+                }
+                
+                [_globalArray addObject:innerArray];
+             //[[data_retrived objectAtIndex:k]objectForKey:@"fri_days"]]
+            }
+            }
+             NSLog(@"-=-=-=-globalarray-=-== %@",_globalArray);
+            
+            copyArray = [data_retrived mutableCopy];
+            if([copyArray count] > 0){
+                
+                NSLog(@"==data..%@",copyArray);
+                float thgt = [copyArray count]*140;
+                
+                if(thgt > 550){
+                    
+                    thgt = 550;
+                }
+                
+                [FindUser removeFromSuperview];
+                [backView removeFromSuperview];
+                [self removePulseLoader];
+                FindUser=[[UITableView alloc]initWithFrame:CGRectMake(30,210, 798-60,550 ) style:UITableViewStylePlain];
+                FindUser.delegate=self;
+                FindUser.dataSource=self;
+                FindUser.backgroundColor = [UIColor clearColor];
+                FindUser.tag=2;
+                [FindUser setShowsHorizontalScrollIndicator:NO];
+                [FindUser setShowsVerticalScrollIndicator:NO];
+                FindUser.separatorColor = [UIColor clearColor];
+                
+                [_mainView addSubview:FindUser];
+                [FindUser reloadData];
+                
+            }else{
+                [self removePulseLoader];
+                
+                [FindUser removeFromSuperview];
+                [backView removeFromSuperview];
+                
+                backView = [[UIView alloc] initWithFrame:CGRectMake(30, 210, 798-60, 108)];
+                backView.backgroundColor = [UIColor whiteColor];
+                [_mainView addSubview:backView];
+                
+                
+                UILabel *nodata = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 798-10, 108)];
+                nodata.backgroundColor = [UIColor clearColor];
+                nodata.textColor =[UIColor colorWithRed:(94.0f/255.0f) green:(94.0f/255.0f) blue:(94.0f/255.0f) alpha:1];
+                nodata.font = [UIFont fontWithName:GLOBALTEXTFONT size:32];
+                nodata.textAlignment = NSTextAlignmentLeft;
+                [backView addSubview:nodata];
+                
+                if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+                {
+                    nodata.text = [NSString NodataFoundF];
+                }
+                else
+                {
+                    nodata.text = [NSString NodataFoundD];
+                }
+                
+            }
+            
+        });
+    });
+    
+
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
