@@ -200,7 +200,7 @@
 }
 +(NSString *)statNameD
 {
-    return @"";
+    return @"Hagtøl Børn";
 }
 +(NSString *)freeD
 {
@@ -208,30 +208,30 @@
 }
 +(NSString *)startDateD
 {
-    return @"";
+    return @"Vel Dato Frá";
 }
 +(NSString *)endDateD
 {
-    return @"";
+    return @"Vel Dato Til";
 }
 +(NSString *)allChildD
 {
-    return @"";
+    return @"Øll Børn";
 }
 +(NSString *)totalTimeD
 {
-    return @"";
+    return @"Timer ialt";
 }
 +(NSString *)sickD
 {
-    return @"";
+    return @"Syg";
 }
 +(NSString *)notArrivedD
 {
-    return @"";
+    return @"Ikke fremmødt";
 }
 +(NSString *) NodayD
 {
-    return @"";
+    return @"Dag/ar!";
 }
 @end

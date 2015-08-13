@@ -338,6 +338,10 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:YES];
     
+    startdateString=@"";
+    enddateString=@"";
+    free_number=@"";
+    
         _globalArray = [[NSMutableArray alloc]init];
     
     [self callPulseLoaderView:CGRectMake(80, 180, 40, 40) view:self.view];
@@ -574,16 +578,6 @@
     
     NSString *hourCheck=[NSString stringWithFormat:@"%@",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
     
-    if ([hourCheck isEqualToString:@"0"])
-    {
-        totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
-
-    }
-    else
-    {
-        totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar %@ Min %@ Sek",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totminutes"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totsec"]];
-
-    }
     
     
     
@@ -748,6 +742,17 @@
         sick.text = [NSString sickF];
         notArrived.text = [NSString notArrivedF];
         komin.text=[NSString KominF];
+        if ([hourCheck isEqualToString:@"0"])
+        {
+            totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
+            
+        }
+        else
+        {
+            totalTimeTxt.text=[NSString stringWithFormat:@"%@ Tímar %@ Min %@ Sek",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totminutes"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totsec"]];
+            
+        }
+
         if (sickArray.count == 0)
         {
             sickText.text = [NSString stringWithFormat:@"0 %@",[NSString NodayF]];
@@ -807,6 +812,17 @@
         sick.text = [NSString sickD];
         notArrived.text = [NSString notArrivedD];
         komin.text=[NSString KominD];
+        if ([hourCheck isEqualToString:@"0"])
+        {
+            totalTimeTxt.text=[NSString stringWithFormat:@"%@ Times",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"]];
+            
+        }
+        else
+        {
+            totalTimeTxt.text=[NSString stringWithFormat:@"%@ Timer %@ Min %@ Sec",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"tothour"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totminutes"],[[copyArray objectAtIndex:indexPath.row]objectForKey:@"totsec"]];
+            
+        }
+
         
         if (sickArray.count == 0)
         {
@@ -1292,14 +1308,14 @@
         }
 
     }
-    else
-    {
-        startdateString=@"";
-        
-        enddateString=@"";
-        
-        free_number=@"";
-    }
+//    else
+//    {
+//        startdateString=@"";
+//        
+//        enddateString=@"";
+//        
+//        free_number=@"";
+//    }
  
     NSLog(@"childis---- %@", childid);
     
