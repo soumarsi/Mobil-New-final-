@@ -104,9 +104,9 @@
     
     _checkBox = [[UIButton alloc]initWithFrame:CGRectMake(32, 163,26,25)];
     [_checkBox setBackgroundColor:[UIColor clearColor]];
-    [_checkBox setBackgroundImage:[UIImage imageNamed:@"chknr"] forState:UIControlStateNormal];
-    [_checkBox setBackgroundImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateHighlighted];
-    [_checkBox setBackgroundImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateSelected];
+    [_checkBox setBackgroundImage:[UIImage imageNamed:@"checkstat"] forState:UIControlStateNormal];
+    [_checkBox setBackgroundImage:[UIImage imageNamed:@"checkselestat"] forState:UIControlStateHighlighted];
+    [_checkBox setBackgroundImage:[UIImage imageNamed:@"checkselestat"] forState:UIControlStateSelected];
     [_checkBox addTarget:self action:@selector(freeButton:) forControlEvents:UIControlEventTouchUpInside];
     [_mainView addSubview:_checkBox];
     
@@ -638,7 +638,8 @@
     [sickText setBackgroundColor:[UIColor clearColor]];
     [sickText setTextAlignment:NSTextAlignmentLeft];
     [sickText setTextColor:[UIColor blackColor]];
-    [sickText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16.5]];
+    sickText.numberOfLines = [sickArray count];
+    [sickText setFont:[UIFont fontWithName:GLOBALTEXTFONT size:16.5f]];
     [backView addSubview:sickText];
     
     if (sickArray.count == 0)
@@ -647,9 +648,8 @@
     }
     else
     {
-         sickText.frame = CGRectMake(340, sick.frame.origin.y+sick.frame.size.height+15, 180, [sickArray  count]*18);
+         sickText.frame = CGRectMake(340, sick.frame.origin.y+sick.frame.size.height+15, 100, [sickArray  count]*20);
     }
-   
     
     notArrived = [[UILabel alloc] initWithFrame:CGRectMake(340,sickText.frame.origin.y+sickText.frame.size.height+10, 200, 20)];
     notArrived.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:15];
@@ -990,7 +990,7 @@
     [self.view addSubview:_date_picker];
  
     _date_picker.date = [NSDate date];
-    _date_picker.maximumDate = [NSDate date];
+   // _date_picker.maximumDate = [NSDate date];
     globalString = @"startdate";
     [_blackView setHidden:NO];
     [_datePickerBackView setHidden:NO];
@@ -1136,7 +1136,7 @@
     else
     {
         
-        _date_picker.maximumDate = [NSDate date];
+        //_date_picker.maximumDate = [NSDate date];
         [_blackView setAlpha:0.6f];
         
         [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];

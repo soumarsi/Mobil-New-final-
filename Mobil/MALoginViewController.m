@@ -76,7 +76,7 @@
     UserName.backgroundColor = [UIColor clearColor];
     UserName.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     UserName.font = [UIFont systemFontOfSize:18.0f];
-    UserName.placeholder = @"Email";
+    UserName.placeholder = [NSString EmailF];
     //UserName.text=@"aljo@olivant.fo";
     UserName.textColor = [UIColor colorWithRed:(94.0f/255.0f) green:(94.0f/255.0f) blue:(94.0f/255.0f) alpha:1];
     [UserName setValue:[UIColor colorWithRed:(94.0f/255.0f) green:(94.0f/255.0f) blue:(94.0f/255.0f) alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
@@ -100,7 +100,7 @@
     Password.backgroundColor = [UIColor clearColor];
     Password.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     Password.font = [UIFont systemFontOfSize:18.0f];
-    Password.placeholder = @"Password";
+    Password.placeholder = [NSString passwordF];
    // Password.text=@"123456";
     Password.textColor = [UIColor colorWithRed:(94.0f/255.0f) green:(94.0f/255.0f) blue:(94.0f/255.0f) alpha:1];
     [Password setValue:[UIColor colorWithRed:(94.0f/255.0f) green:(94.0f/255.0f) blue:(94.0f/255.0f) alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
@@ -114,9 +114,9 @@
     UIButton *Login = [UIButton buttonWithType:UIButtonTypeCustom];
     Login.frame = CGRectMake(135, 320, 726/2, 85/2);
     Login.backgroundColor = [UIColor colorWithRed:(235.0f/255.0f) green:(62.0f/255.0f) blue:(35.0f/255.0f) alpha:0.6f];
-    [Login setTitle:@"Login" forState:UIControlStateNormal];
-    [Login setTitle:@"Login" forState:UIControlStateSelected];
-    [Login setTitle:@"Login" forState:UIControlStateHighlighted];
+    [Login setTitle:[NSString LoginF] forState:UIControlStateNormal];
+    [Login setTitle:[NSString LoginF] forState:UIControlStateSelected];
+    [Login setTitle:[NSString LoginF] forState:UIControlStateHighlighted];
     [Login setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [Login setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
     [Login setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];

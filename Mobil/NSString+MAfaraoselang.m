@@ -229,4 +229,17 @@
 {
     return @"Dag/ar!";
 }
+
++(NSString *)EmailF
+{
+    return @"Teldupostur";
+}
++(NSString *)passwordF
+{
+    return @"Loyniorð";
+}
++(NSString *)LoginF
+{
+    return @"Innrita";
+}
 @end

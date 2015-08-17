@@ -76,4 +76,7 @@
 +(NSString *)sickF;
 +(NSString *)notArrivedF;
 +(NSString *) NodayF;
++(NSString *)EmailF;
++(NSString *)passwordF;
++(NSString *)LoginF;
 @end
