@@ -196,6 +196,45 @@
     [CrossButton addTarget:self action:@selector(Cross) forControlEvents:UIControlEventTouchUpInside];
     [WhiteView addSubview:CrossButton];
     
+    freeBlackView = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    [freeBlackView setBackgroundColor:[UIColor blackColor]];
+    [freeBlackView setAlpha:0.8f];
+    [self.view addSubview:freeBlackView];
+    [freeBlackView setHidden:YES];
+    
+    _blackView = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    [_blackView setBackgroundColor:[UIColor blackColor]];
+    [_blackView setAlpha:0.7f];
+    [self.view addSubview:_blackView];
+    [_blackView setHidden:YES];
+    
+    
+    _datePickerBackView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+    [_datePickerBackView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:_datePickerBackView];
+    [_datePickerBackView setHidden:YES];
+    
+    _childPickerDoneButton = [[UIButton alloc]initWithFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+    [_childPickerDoneButton setBackgroundColor:[UIColor colorWithRed:(101.0f/255.0f) green:(210.0f/255.0f) blue:(252.0f/255.0f) alpha:1.0f]];
+    [_childPickerDoneButton setTitle:@"Ok" forState:UIControlStateNormal];
+    _childPickerDoneButton.layer.cornerRadius  = 3.0f;
+    [_childPickerDoneButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _childPickerDoneButton.titleLabel.font = [UIFont fontWithName:GLOBALTEXTFONT size:17];
+    _childPickerDoneButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_childPickerDoneButton addTarget:self action:@selector(DonePicker:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_childPickerDoneButton];
+    [_childPickerDoneButton setHidden:YES];
+    
+    _childPickerCancelButton = [[UIButton alloc]initWithFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+    [_childPickerCancelButton setBackgroundColor:[UIColor colorWithRed:(97.0f/255.0f) green:(97.0f/255.0f) blue:(97.0f/255.0f) alpha:1.0f]];
+    [_childPickerCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _childPickerCancelButton.layer.cornerRadius  = 3.0f;
+    _childPickerCancelButton.titleLabel.font = [UIFont fontWithName:GLOBALTEXTFONT size:17];
+    _childPickerCancelButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_childPickerCancelButton addTarget:self action:@selector(CancelButtonPicker:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_childPickerCancelButton];
+    [_childPickerCancelButton setHidden:YES];
+    
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
     {
@@ -207,6 +246,7 @@
         pageTitle.text = [NSString KominF];
         [UserName setPlaceholder:[NSString SearchF]];
             [AddNewLabel setText:[NSString sickByParentF]];
+        [_childPickerCancelButton setTitle:[NSString CancelF] forState:UIControlStateNormal];
     }
     else
     {
@@ -218,6 +258,7 @@
         pageTitle.text = [NSString KominD];
         [UserName setPlaceholder:[NSString SearchD]];
          [AddNewLabel setText:[NSString sickByParentD]];
+        [_childPickerCancelButton setTitle:[NSString CancelD] forState:UIControlStateNormal];
     }
 
     
@@ -2011,8 +2052,9 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
 
 -(void)Crossfree
 {
-    [freeBlackView removeFromSuperview];
+    [freeBlackView setHidden:YES];
     [freeScrollBackView removeFromSuperview];
+    [_date_picker setHidden:YES];
 }
 -(void)bto_actionSjk:(UIButton *)sender{
 
@@ -2374,10 +2416,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
 }
 -(void)bto_actionFri:(UIButton *)sender{
     
-    freeBlackView = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
-    [freeBlackView setBackgroundColor:[UIColor blackColor]];
-    [freeBlackView setAlpha:0.8f];
-    [self.view addSubview:freeBlackView];
+    [freeBlackView setHidden:NO];
     
     freeScrollBackView = [[UIView alloc]initWithFrame:CGRectMake(360.0f, 150.0f,400, 400.0f)];
     [freeScrollBackView setBackgroundColor:[UIColor whiteColor]];
@@ -2401,7 +2440,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [freeScrollView addSubview:CrossButton];
     //Start an activity indicator here
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         //Call your function or whatever work that needs to be done
         //Code in this part is run on a background thread
@@ -2415,23 +2454,25 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                                                         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                             if(error == nil)
                                                             {
-                                                                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                                 
                                                                 [freeListArray removeAllObjects];
+                                                                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                                 
                                                                 freeListArray=[dict mutableCopy];
-                                                                
-                                                             NSLog(@"array-=-=-- %@", freeListArray);
                                                                 [self settile];
+                                                                NSLog(@"array-=-=-- %@", freeListArray);
+                                                                
                                                             }
                                                             
                                                         }];
         
         [dataTask resume];
-       
+        
     });
+        
+
+     
     
- 
     
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
@@ -2492,6 +2533,11 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
 -(void)settile
 {
     
+    NSLog(@"count-=-=- %lu", (unsigned long)freeListArray.count);
+    
+    divide = 0;
+    count = 0;
+    
     for(int k = 0; k< freeListArray.count ; k++)
     {
         count = k % 2;
@@ -2515,31 +2561,33 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     }
    
     
-    UIButton *frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
-    [frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
-    frombutton.layer.borderWidth = 1.0f;
-    frombutton.layer.cornerRadius = 4.0f;
-    frombutton.layer.borderColor = [[UIColor grayColor] CGColor];
-    [freeScrollView addSubview:frombutton];
+    _frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
+    [_frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [_frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    _frombutton.layer.borderWidth = 1.0f;
+    _frombutton.layer.cornerRadius = 4.0f;
+    [_frombutton addTarget:self action:@selector(startDate:) forControlEvents:UIControlEventTouchUpInside];
+    _frombutton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:_frombutton];
     
-    UIButton *toButton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+160, 310, 40)];
-    [toButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [toButton.titleLabel setFont:[UIFont systemFontOfSize:19]];
-    toButton.layer.borderWidth = 1.0f;
-    toButton.layer.cornerRadius = 4.0f;
-    toButton.layer.borderColor = [[UIColor grayColor] CGColor];
-    [freeScrollView addSubview:toButton];
+    _toButton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+160, 310, 40)];
+    [_toButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [_toButton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    _toButton.layer.borderWidth = 1.0f;
+    _toButton.layer.cornerRadius = 4.0f;
+    [_toButton addTarget:self action:@selector(endDate:) forControlEvents:UIControlEventTouchUpInside];
+    _toButton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:_toButton];
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
     {
-        [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-        [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+        [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
     }
     else
     {
-        [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-        [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+        [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
     }
     
     UIButton *defaultbutton = [[UIButton alloc]init];
@@ -2565,6 +2613,207 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     NSLog(@"-=-=-=- %d", divide);
     
      freeScrollView.contentSize = CGSizeMake(0,  (30*divide)+70+250);
+}
+-(void)startDate:(UIButton *)sender
+{
+    
+    _date_picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(300, 568.0f+50.0f, 424, 260)];
+    _date_picker.datePickerMode = UIDatePickerModeDate;
+    [_date_picker addTarget:self
+                     action:@selector(LabelChange:)
+           forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_date_picker];
+    
+    _date_picker.date = [NSDate date];
+    // _date_picker.maximumDate = [NSDate date];
+    globalString = @"startdate";
+    [_blackView setHidden:NO];
+    [_datePickerBackView setHidden:NO];
+    [_childPickerDoneButton setHidden:NO];
+    [_childPickerCancelButton setHidden:NO];
+    [_date_picker setHidden:NO];
+    
+    [_blackView setAlpha:0.0f];
+    
+    [_datePickerBackView setFrame:CGRectMake(0.0f,768.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+    [_childPickerDoneButton setFrame:CGRectMake(900.0f, 773.0f, 83, 35.0f)];
+    [_childPickerCancelButton setFrame:CGRectMake(800.0f, 773.0f, 83, 35.0f)];
+    [_date_picker setFrame:CGRectMake(0.0f, 568.0f+250.0f, self.view.frame.size.width, 150.0f)];
+    
+    [UIView animateWithDuration:0.8 animations:^{
+        
+        [_blackView setAlpha:0.6f];
+        [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+        [_childPickerDoneButton setFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+        [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+        [_date_picker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+-(void)endDate:(UIButton *)sender
+{
+    
+    _date_picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(300, 568.0f+50.0f, 424, 260)];
+    _date_picker.datePickerMode = UIDatePickerModeDate;
+    [_date_picker addTarget:self
+                     action:@selector(LabelChange:)
+           forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_date_picker];
+    
+    
+    NSDate *dateFromString = [[NSDate alloc] init];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+    dateFromString = [dateFormatter dateFromString:startdateString];
+    int daysToAdd = 0;
+    NSDate *newDate1 = [dateFromString dateByAddingTimeInterval:60*60*24*daysToAdd];
+    
+    [_date_picker setMinimumDate:newDate1];
+    
+    
+    globalString = @"enddate";
+    
+    [_blackView setHidden:NO];
+    [_datePickerBackView setHidden:NO];
+    [_childPickerDoneButton setHidden:NO];
+    [_childPickerCancelButton setHidden:NO];
+    [_date_picker setHidden:NO];
+    
+    [_blackView setAlpha:0.0f];
+    
+    [_datePickerBackView setFrame:CGRectMake(0.0f,768.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+    [_childPickerDoneButton setFrame:CGRectMake(900.0f, 773.0f, 83, 35.0f)];
+    [_childPickerCancelButton setFrame:CGRectMake(800.0f, 773.0f, 83, 35.0f)];
+    [_date_picker setFrame:CGRectMake(0.0f, 568.0f+250.0f, self.view.frame.size.width, 150.0f)];
+    
+    [UIView animateWithDuration:0.8 animations:^{
+        
+        [_blackView setAlpha:0.6f];
+        [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+        [_childPickerDoneButton setFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+        [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+        [_date_picker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+-(void)DonePicker:(UIButton *)sender
+{
+  if ([globalString isEqualToString:@"startdate"])
+    {
+        [_blackView setAlpha:0.6f];
+        
+        [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+        [_childPickerDoneButton setFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+        [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+        [_date_picker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
+        
+        
+        [UIView animateWithDuration:0.8 animations:^{
+            
+            [_blackView setAlpha:0.0f];
+            
+            [_datePickerBackView setFrame:CGRectMake(0.0f,768.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+            [_childPickerDoneButton setFrame:CGRectMake(900.0f, 773.0f, 83, 35.0f)];
+            [_childPickerCancelButton setFrame:CGRectMake(800.0f, 773.0f, 83, 35.0f)];
+            [_date_picker setFrame:CGRectMake(0.0f, 568.0f+200.0f, self.view.frame.size.width, 150.0f)];
+            
+        } completion:^(BOOL finished) {
+            
+            [_blackView setHidden:YES];
+            [_datePickerBackView setHidden:YES];
+            [_childPickerDoneButton setHidden:YES];
+            [_childPickerCancelButton setHidden:YES];
+            [_date_picker setHidden:YES];
+            
+            NSDate *myDate = _date_picker.date;
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"dd-MM-yyyy"];
+            startdateString = [dateFormat stringFromDate:myDate];
+            [_frombutton setTitle:startdateString forState:UIControlStateNormal];
+            
+        }];
+        
+        
+    }
+    else
+    {
+        
+        //_date_picker.maximumDate = [NSDate date];
+        [_blackView setAlpha:0.6f];
+        
+        [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+        [_childPickerDoneButton setFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+        [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+        [_date_picker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
+        
+        
+        [UIView animateWithDuration:0.8 animations:^{
+            
+            [_blackView setAlpha:0.0f];
+            
+            [_datePickerBackView setFrame:CGRectMake(0.0f,768.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+            [_childPickerDoneButton setFrame:CGRectMake(900.0f, 773.0f, 83, 35.0f)];
+            [_childPickerCancelButton setFrame:CGRectMake(800.0f, 773.0f, 83, 35.0f)];
+            [_date_picker setFrame:CGRectMake(0.0f, 568.0f+200.0f, self.view.frame.size.width, 150.0f)];
+            
+        } completion:^(BOOL finished) {
+            
+            [_blackView setHidden:YES];
+            [_datePickerBackView setHidden:YES];
+            [_childPickerDoneButton setHidden:YES];
+            [_childPickerCancelButton setHidden:YES];
+            [_date_picker setHidden:YES];
+            
+            NSDate *myDate = _date_picker.date;
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"dd-MM-yyyy"];
+            enddateString = [dateFormat stringFromDate:myDate];
+            [_toButton setTitle:enddateString forState:UIControlStateNormal];
+        }];
+    }
+}
+-(void)CancelButtonPicker:(UIButton *)sender
+{
+    
+    [_blackView setAlpha:0.6f];
+    
+    [_datePickerBackView setFrame:CGRectMake(0.0f,568.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+    [_childPickerDoneButton setFrame:CGRectMake(900.0f, 573.0f, 83, 35.0f)];
+    [_childPickerCancelButton setFrame:CGRectMake(800.0f, 573.0f, 83, 35.0f)];
+
+    [_date_picker setFrame:CGRectMake(0.0f, 568.0f+50.0f, self.view.frame.size.width, 150.0f)];
+    
+    [UIView animateWithDuration:0.8 animations:^{
+        
+        [_blackView setAlpha:0.0f];
+        
+        [_datePickerBackView setFrame:CGRectMake(0.0f,768.0f, self.view.frame.size.width, self.view.frame.size.height-568)];
+        [_childPickerDoneButton setFrame:CGRectMake(900.0f, 773.0f, 83, 35.0f)];
+        [_childPickerCancelButton setFrame:CGRectMake(800.0f, 773.0f, 83, 35.0f)];
+        [_date_picker setFrame:CGRectMake(0.0f, 568.0f+200.0f, self.view.frame.size.width, 150.0f)];
+        
+    } completion:^(BOOL finished) {
+        
+        [_blackView setHidden:YES];
+        [_datePickerBackView setHidden:YES];
+        [_childPickerDoneButton setHidden:YES];
+        [_childPickerCancelButton setHidden:YES];
+     
+        [_date_picker setHidden:YES];
+    }];
+    
+}
+
+- (void)LabelChange:(id)sender
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.dateStyle = NSDateFormatterNoStyle;
+    df.dateFormat=@"dd-MM-yyyy";
+    
 }
 - (void)didReceiveMemoryWarning
 {

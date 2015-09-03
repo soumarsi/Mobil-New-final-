@@ -36,11 +36,18 @@
     UIButton *comment;
     UIButton *broytbutton;
     UIButton *slettabutton,*slettanote,*startTime,*endTime,*strtTm,*endtTm;
-    
+    NSString *globalString,*startdateString,*enddateString;
     UIView *freeBlackView,*freeScrollBackView;;
     UIScrollView *freeScrollView;
     NSMutableArray *freeListArray;
     int count,divide;
 }
 @property (nonatomic) NSString *pageId;
+@property (nonatomic, strong) UIView *blackView;
+@property (nonatomic, strong) UIView *datePickerBackView;
+@property (nonatomic, strong) UIButton *childPickerDoneButton;
+@property (nonatomic, strong) UIButton *childPickerCancelButton;
+@property (strong, nonatomic) UIDatePicker *date_picker;
+@property (strong, nonatomic) UIButton *frombutton;
+@property (strong, nonatomic) UIButton *toButton;
 @end
