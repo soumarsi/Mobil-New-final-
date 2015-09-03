@@ -41,6 +41,12 @@
     UIScrollView *freeScrollView;
     NSMutableArray *freeListArray;
     int count,divide;
+    
+    //-//
+    
+    UIButton *defaultbutton;
+    UIButton *frombutton;
+    UIButton *toButton;
 }
 @property (nonatomic) NSString *pageId;
 @property (nonatomic, strong) UIView *blackView;

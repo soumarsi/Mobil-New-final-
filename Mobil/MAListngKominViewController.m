@@ -2561,6 +2561,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     }
    
     
+
     _frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
     [_frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
@@ -2578,6 +2579,23 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [_toButton addTarget:self action:@selector(endDate:) forControlEvents:UIControlEventTouchUpInside];
     _toButton.layer.borderColor = [[UIColor grayColor] CGColor];
     [freeScrollView addSubview:_toButton];
+
+    frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
+    [frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    frombutton.layer.borderWidth = 1.0f;
+    frombutton.layer.cornerRadius = 4.0f;
+    frombutton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:frombutton];
+    
+    toButton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+160, 310, 40)];
+    [toButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [toButton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    toButton.layer.borderWidth = 1.0f;
+    toButton.layer.cornerRadius = 4.0f;
+    toButton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:toButton];
+
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
     {
@@ -2590,14 +2608,16 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
     }
     
-    UIButton *defaultbutton = [[UIButton alloc]init];
+    defaultbutton = [[UIButton alloc]init];
     [defaultbutton setFrame:CGRectMake(25, (30*divide)+215, 110, 40)];
     [defaultbutton setBackgroundColor:[UIColor colorWithRed:(101.0f/255.0f) green:(210.0f/255.0f) blue:(252.0f/255.0f) alpha:1.0f]];
     [defaultbutton setTitle:@"Frí Í dag" forState:UIControlStateNormal];
     [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateHighlighted];
     [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateSelected];
     defaultbutton.layer.cornerRadius = 4.0f;
+    [defaultbutton addTarget:self action:@selector(Default_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [defaultbutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
     [freeScrollView addSubview:defaultbutton];
     
     UIButton *savebutton = [[UIButton alloc]init];
@@ -2614,6 +2634,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     
      freeScrollView.contentSize = CGSizeMake(0,  (30*divide)+70+250);
 }
+
 -(void)startDate:(UIButton *)sender
 {
     
@@ -2815,6 +2836,44 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     df.dateFormat=@"dd-MM-yyyy";
     
 }
+
+-(void)Default_button_action:(UIButton *)sender
+{
+    if (sender.selected==YES)
+    {
+        sender.selected=NO;
+        
+        if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+        {
+            [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+            [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        }
+        else
+        {
+            [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+            [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        }
+
+    }
+    else
+    {
+        sender.selected=YES;
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"dd-MM-yyyy"];
+        
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+        
+        NSString *stringFromDate = [formatter stringFromDate:[NSDate date]];
+        
+        NSLog(@">>>>>>>>>>> %@",stringFromDate);
+        
+        [frombutton setTitle:stringFromDate forState:UIControlStateNormal];
+        [toButton setTitle:stringFromDate forState:UIControlStateNormal];
+        
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
