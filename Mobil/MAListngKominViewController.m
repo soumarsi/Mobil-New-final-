@@ -41,6 +41,7 @@
     [super viewDidLoad];
     
     freeListArray = [[NSMutableArray alloc]init];
+    listcheckarray = [[NSMutableArray alloc]init];
 	
     mainView =[[UIView alloc]initWithFrame:CGRectMake(226, 0, 798,1536/2)];
     mainView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bgkomin.png"]];
@@ -2547,9 +2548,11 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         UIButton *freecheckbutton = [[UIButton alloc]init];
         [freecheckbutton setFrame:CGRectMake((18+170)*count+25, (30*divide)+77, 15, 15)];
         [freecheckbutton setBackgroundColor:[UIColor clearColor]];
-        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximage"] forState:UIControlStateNormal];
-        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximageselected"] forState:UIControlStateHighlighted];
-        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximageselected"] forState:UIControlStateSelected];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximageselected"] forState:UIControlStateNormal];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximage"] forState:UIControlStateHighlighted];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximage"] forState:UIControlStateSelected];
+        [freecheckbutton addTarget:self action:@selector(freecheckAction:) forControlEvents:UIControlEventTouchUpInside];
+        freecheckbutton.tag = k;
         [freeScrollView addSubview:freecheckbutton];
         
         UIButton *freecheckbuttonLabel = [[UIButton alloc]init];
@@ -2634,7 +2637,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [self.view addSubview:_date_picker];
     
     _date_picker.date = [NSDate date];
-    // _date_picker.maximumDate = [NSDate date];
+     _date_picker.minimumDate = [NSDate date];
     globalString = @"startdate";
     [_blackView setHidden:NO];
     [_datePickerBackView setHidden:NO];
@@ -2871,6 +2874,30 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
 -(void)saveFree:(UIButton *)sender
 {
     
+}
+-(void)freecheckAction:(UIButton *)sender
+{
+    if (sender.selected == YES)
+    {
+        sender.selected = NO;
+        
+        for (int j = 0; j< listcheckarray.count; j++)
+        {
+            if ([freeListArray objectAtIndex:sender.tag] == [listcheckarray objectAtIndex:j])
+        {
+            [listcheckarray removeObjectAtIndex:j];
+            }
+        }
+    }
+    else
+    {
+        sender.selected = YES;
+        
+        [listcheckarray addObject:[freeListArray objectAtIndex:sender.tag]];
+   
+    }
+    NSString *joinedString = [listcheckarray componentsJoinedByString:@","];
+       NSLog(@"listarray-=-=- %@", joinedString);
 }
 - (void)didReceiveMemoryWarning
 {

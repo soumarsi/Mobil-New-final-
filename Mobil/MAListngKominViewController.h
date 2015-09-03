@@ -41,7 +41,7 @@
     UIScrollView *freeScrollView;
     NSMutableArray *freeListArray;
     int count,divide;
-    
+    NSMutableArray *listcheckarray;
     //-//
     
     UIButton *defaultbutton;
