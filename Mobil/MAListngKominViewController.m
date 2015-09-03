@@ -2459,6 +2459,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                                                                 NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                                 
                                                                 freeListArray=[dict mutableCopy];
+                                                                childid = sender.tag;
                                                                 [self settile];
                                                                 NSLog(@"array-=-=-- %@", freeListArray);
                                                                 
@@ -2612,6 +2613,8 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [savebutton setTitle:@"Ok" forState:UIControlStateHighlighted];
     [savebutton setTitle:@"Ok" forState:UIControlStateSelected];
     savebutton.layer.cornerRadius = 4.0f;
+    savebutton.tag = childid;
+    [savebutton addTarget:self action:@selector(saveFree:) forControlEvents:UIControlEventTouchUpInside];
     [savebutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [freeScrollView addSubview:savebutton];
     
@@ -2865,7 +2868,10 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         
     }
 }
-
+-(void)saveFree:(UIButton *)sender
+{
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
