@@ -21,5 +21,5 @@
 #define GLOBALTEXTFONT_BOLD @"Helvetica Bold"
 #define GLOBALTEXTFONT @"Helvetica"
 
-#define APPS_DOMAIN_URL @"http://ansa.fo/iosapp/"
-//#define APPS_DOMAIN_URL @"http://mobil.vega.fo.linux56.unoeuro-server.com/iosapp/"
+//#define APPS_DOMAIN_URL @"http://ansa.fo/iosapp/"
+#define APPS_DOMAIN_URL @"http://mobil.vega.fo.linux56.unoeuro-server.com/iosapp/"

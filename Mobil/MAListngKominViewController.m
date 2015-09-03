@@ -39,6 +39,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    freeListArray = [[NSMutableArray alloc]init];
 	
     mainView =[[UIView alloc]initWithFrame:CGRectMake(226, 0, 798,1536/2)];
     mainView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bgkomin.png"]];
@@ -48,9 +50,6 @@
     leftview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 226, 1536/2)];
     leftview.backgroundColor = [[UIColor colorWithRed:(237.0f/255.0f) green:(237.0f/255.0f) blue:(237.0f/255.0f) alpha:1.0f]colorWithAlphaComponent:0.9f];
     [self.view addSubview:leftview];
-    
-   
-
     
     
     UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -664,7 +663,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [checkbox_Fri setImage:[UIImage imageNamed:@"chknr"] forState:UIControlStateNormal];
     [checkbox_Fri setImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateHighlighted];
     [checkbox_Fri setImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateSelected];
-    [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:checkbox_Fri];
     
 
@@ -739,10 +737,28 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             [fri_Label addGestureRecognizer:Fri_LabelTap];
             [fri_Label setUserInteractionEnabled:YES];
             
-            
         }
-        
+        else
+        {
+            NSArray *arr = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] componentsSeparatedByString:@"-"];
+            NSArray *arr1 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"] componentsSeparatedByString:@"-"];
+            
+            UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+            [fri_Label setBackgroundColor:[UIColor clearColor]];
+            [fri_Label setText:[NSString stringWithFormat:@"%@-%@-%@ -- %@-%@-%@",[arr objectAtIndex:2],[arr objectAtIndex:1],[arr objectAtIndex:0],[arr1 objectAtIndex:2],[arr1 objectAtIndex:1],[arr1 objectAtIndex:0]]];
+            fri_Label.tag = indexPath.row;
+            [fri_Label setTextAlignment:NSTextAlignmentCenter];
+            [fri_Label setTextColor:[UIColor redColor]];
+            [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+            [backView addSubview:fri_Label];
+            
+             [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
+        else
+        {
+              [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+        }
     
 
     
@@ -799,7 +815,39 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         
     }
     
+
     
+    if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"sleep_time_start"] isEqualToString:@"00:00:00"]  &&[[[copyArray objectAtIndex:indexPath.row]objectForKey:@"sleep_time_stop"] isEqualToString:@"00:00:00"] && [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"second_sleep_time_start"] isEqualToString:@"00:00:00"] &&[[[copyArray objectAtIndex:indexPath.row]objectForKey:@"second_sleep_time_stop"] isEqualToString:@"00:00:00"] )
+    {
+    
+    }
+    else
+    {
+        UIButton *sovi = [UIButton buttonWithType:UIButtonTypeCustom];
+        sovi.frame = CGRectMake(508, 112, 100, 80/2);
+        sovi.backgroundColor = [UIColor clearColor];
+        [sovi setTitleColor:[UIColor colorWithRed:(95.0f/255.0f) green:(171.0f/255.0f) blue:(222.0f/255.0f) alpha:1] forState:UIControlStateNormal];
+        sovi.tag=indexPath.row;
+        [sovi setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
+        [sovi setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        sovi.titleLabel.font = [UIFont systemFontOfSize:17];
+        [sovi addTarget:self action:@selector(comment_openTime:) forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:sovi];
+        
+        if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+        {
+            [sovi setTitle:[NSString SoviF] forState:UIControlStateNormal];
+            [sovi setTitle:[NSString SoviF] forState:UIControlStateSelected];
+            [sovi setTitle:[NSString SoviF] forState:UIControlStateHighlighted];
+        }
+        else
+        {
+            [sovi setTitle:[NSString SoviD] forState:UIControlStateNormal];
+            [sovi setTitle:[NSString SoviD] forState:UIControlStateSelected];
+            [sovi setTitle:[NSString SoviD] forState:UIControlStateHighlighted];
+        }
+    
+    }
     return cell;
     
 }
@@ -1960,58 +2008,12 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
   
     
 }
--(void)bto_actionFri:(UIButton *)sender{
-    
-    
-    
-    
-    sender.selected=YES;
-    
-    NSError *error=nil;
-    
-    NSString *urlString1 = [NSString stringWithFormat:@"%@checkstat.php?id=%@&status=F",APPS_DOMAIN_URL,[[copyArray objectAtIndex:sender.tag]objectForKey:@"id"]];
-    
-    NSLog(@"urlString1%@",urlString1);
-    
-    NSURL *requestURL1 = [NSURL URLWithString:urlString1];
-    NSString* urlTextEscaped = [urlString1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSData *signeddataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlTextEscaped]options:NSDataReadingUncached error:&error];
-    NSString *serverOutput = [[NSString alloc] initWithData:signeddataURL encoding: NSASCIIStringEncoding];
-    
-    
-    
-    NSString *urlString;
-    
-    urlString = [NSString stringWithFormat:@"%@arrived_list.php?room_id=%@&admin_id=%@",APPS_DOMAIN_URL,pageId,[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]];
-    
-    
-    
-    NSLog(@" %@",urlString);
-    NSURL *requestURL = [NSURL URLWithString:urlString];
-    
-    NSLog(@"%@", urlString);
-    NSData *signeddataURL1 =  [NSData dataWithContentsOfURL:requestURL options:NSDataReadingUncached error:&error];
-    
-    NSMutableDictionary *result = [NSJSONSerialization
-                                   JSONObjectWithData:signeddataURL1 //1
-                                   
-                                   options:kNilOptions
-                                   error:&error];
-    [copyArray removeAllObjects];
-    [data_retrived removeAllObjects];
-    for(NSMutableDictionary *dict in result)
-    {
-        [data_retrived addObject:dict];
-        
-    }
-    copyArray = [data_retrived mutableCopy];
-    [FindUser reloadData];
-    
-    
-    
-    
-}
 
+-(void)Crossfree
+{
+    [freeBlackView removeFromSuperview];
+    [freeScrollBackView removeFromSuperview];
+}
 -(void)bto_actionSjk:(UIButton *)sender{
 
 
@@ -2241,7 +2243,329 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     
     //    self.numberOfSpinners += 1;
 }
+-(void)comment_openTime:(UIButton *)sender{
+    
+    pickerBack1 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height)];
+    pickerBack1.backgroundColor = [UIColor colorWithRed:(0 / 255.0f) green:(0 / 255.0f) blue:(0 / 255.0f) alpha:0.7f];
+    [mainView addSubview:pickerBack1];
+    [mainView bringSubviewToFront:pickerBack1];
+    
+    okCls1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    okCls1.frame = CGRectMake(635, 120, 120/2, 120/2);
+    okCls1.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cross"]];
+    [okCls1 addTarget:self action:@selector(closesovi:) forControlEvents:UIControlEventTouchUpInside];
+    okCls1.titleLabel.textColor = [UIColor blackColor];
+    [mainView addSubview:okCls1];
+    [mainView bringSubviewToFront:okCls1];
+    
+    
+    DeatilsView1 = [[UIView alloc] initWithFrame:CGRectMake(150, 160, 490, 370)];
+    DeatilsView1.backgroundColor = [UIColor whiteColor];
+    [mainView addSubview:DeatilsView1];
+    [mainView bringSubviewToFront:DeatilsView1];
+    
+    UILabel *ttPOP = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 490, 30)];
+    ttPOP.backgroundColor = [UIColor clearColor];
+    ttPOP.textColor = [UIColor grayColor];
+    ttPOP.font = [UIFont fontWithName:GLOBALTEXTFONT size:30];
+    ttPOP.textAlignment = NSTextAlignmentCenter;
+    [DeatilsView1 addSubview:ttPOP];
+    
+    
+    startTime = [[UIButton alloc] initWithFrame:CGRectMake(100, 105, 120, 60)];
+    startTime.backgroundColor = [UIColor clearColor];
+    startTime.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    startTime.titleLabel.font = [UIFont systemFontOfSize:22.0f];
+    [startTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_start"] forState:UIControlStateNormal];
+    [startTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_start"] forState:UIControlStateHighlighted];
+    [startTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_start"] forState:UIControlStateSelected];
+    [startTime setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [startTime setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [startTime setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [DeatilsView1 addSubview:startTime];
+    
+    UILabel *strtLbl = [[UILabel alloc] initWithFrame:CGRectMake(112, 80, 125, 20)];
+    strtLbl.textColor = [UIColor blackColor];
+    strtLbl.font = [UIFont systemFontOfSize:18];
+    [DeatilsView1 addSubview:strtLbl];
+    
+    
+    endTime = [[UIButton alloc] initWithFrame:CGRectMake(255, 105, 120, 60)];
+    endTime.backgroundColor = [UIColor clearColor];
+    endTime.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    endTime.titleLabel.font = [UIFont systemFontOfSize:22.0f];
+    [endTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_stop"] forState:UIControlStateNormal];
+    [endTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_stop"] forState:UIControlStateHighlighted];
+    [endTime setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"sleep_time_stop"] forState:UIControlStateSelected];
+    [endTime setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [endTime setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [endTime setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [DeatilsView1 addSubview:endTime];
+    
+    
+    UILabel *endtLbl = [[UILabel alloc] initWithFrame:CGRectMake(195+73, 80, 125, 20)];
+    endtLbl.textColor = [UIColor blackColor];
+    endtLbl.font = [UIFont systemFontOfSize:18];
+    [DeatilsView1 addSubview:endtLbl];
+    
 
+    
+    //second....................
+    
+    strtTm = [[UIButton alloc] initWithFrame:CGRectMake(100, 105+140, 120, 60)];
+    strtTm.backgroundColor = [UIColor clearColor];
+    strtTm.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    strtTm.titleLabel.font = [UIFont systemFontOfSize:22.0f];
+    [strtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_start"] forState:UIControlStateNormal];
+    [strtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_start"] forState:UIControlStateHighlighted];
+    [strtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_start"] forState:UIControlStateSelected];
+    [strtTm setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [strtTm setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [strtTm setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [DeatilsView1 addSubview:strtTm];
+    
+    UILabel *strtLbl2 = [[UILabel alloc] initWithFrame:CGRectMake(112, 80+140, 125, 20)];
+    strtLbl2.textColor = [UIColor blackColor];
+    strtLbl2.font = [UIFont systemFontOfSize:18];
+    [DeatilsView1 addSubview:strtLbl2];
+    
+    
+    endtTm = [[UIButton alloc] initWithFrame:CGRectMake(255, 105+140, 120, 60)];
+    endtTm.backgroundColor = [UIColor clearColor];
+    endtTm.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    endtTm.titleLabel.font = [UIFont systemFontOfSize:22.0f];
+    [endtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_stop"] forState:UIControlStateNormal];
+    [endtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_stop"] forState:UIControlStateHighlighted];
+    [endtTm setTitle:[[copyArray objectAtIndex:sender.tag]objectForKey:@"second_sleep_time_stop"] forState:UIControlStateSelected];
+    [endtTm setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [endtTm setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [endtTm setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [DeatilsView1 addSubview:endtTm];
+    
+    
+    UILabel *endtLbl2 = [[UILabel alloc] initWithFrame:CGRectMake(195+73, 80+140, 125, 20)];
+    endtLbl2.textColor = [UIColor blackColor];
+    endtLbl2.font = [UIFont systemFontOfSize:18];
+    [DeatilsView1 addSubview:endtLbl2];
+    
+    if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+    {
+        ttPOP.text = @"Sovi";
+        strtLbl.text = @"Frá klokkan";
+        endtLbl.text = @"Til klokkan";
+        strtLbl2.text = @"Frá klokkan";
+        endtLbl2.text = @"Til klokkan";
+    }
+    else
+    {
+        ttPOP.text = @"Sovet";
+        strtLbl.text = @"Fra klokken";
+        endtLbl.text = @"Til klokken";
+        strtLbl2.text = @"Fra klokken";
+        endtLbl2.text = @"Til klokken";
+    }
+}
+-(void)closesovi:(UIButton *)sender{
+    
+    
+    DeatilsView1.hidden = YES;
+    okCls1.hidden = YES;
+    pickerBack1.hidden =YES;
+}
+-(void)bto_actionFri:(UIButton *)sender{
+    
+    freeBlackView = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    [freeBlackView setBackgroundColor:[UIColor blackColor]];
+    [freeBlackView setAlpha:0.8f];
+    [self.view addSubview:freeBlackView];
+    
+    freeScrollBackView = [[UIView alloc]initWithFrame:CGRectMake(360.0f, 150.0f,400, 400.0f)];
+    [freeScrollBackView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:freeScrollBackView];
+    
+    freeScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 400.0f, 400.0F)];
+    [freeScrollView setBackgroundColor:[UIColor whiteColor]];
+    [freeScrollView setScrollEnabled:YES];
+    [freeScrollView setDelegate:self];
+    [freeScrollBackView addSubview:freeScrollView];
+    
+    UILabel *freeLabel = [[UILabel alloc]initWithFrame:CGRectMake(25.0f, 15.0f, 100.0f, 40.0f)];
+    [freeLabel setTextAlignment:NSTextAlignmentLeft];
+    [freeLabel setTextColor:[UIColor blackColor]];
+    [freeLabel setFont:[UIFont systemFontOfSize:30]];
+    [freeScrollView addSubview:freeLabel];
+    
+    UIButton *CrossButton = [[UIButton alloc]initWithFrame:CGRectMake(360.0f, 7.5f, 28, 28)];
+    [CrossButton setBackgroundImage:[UIImage imageNamed:@"NewsCross"] forState:UIControlStateNormal];
+    [CrossButton addTarget:self action:@selector(Crossfree) forControlEvents:UIControlEventTouchUpInside];
+    [freeScrollView addSubview:CrossButton];
+    //Start an activity indicator here
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        //Call your function or whatever work that needs to be done
+        //Code in this part is run on a background thread
+        
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+        
+        NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"%@freelist.php?subAdminId=%@&room_id=%@&children_id=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[copyArray objectAtIndex:sender.tag]objectForKey:@"id"]]];
+        
+        NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
+                                                        completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                            if(error == nil)
+                                                            {
+                                                                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                                
+                                                                [freeListArray removeAllObjects];
+                                                                
+                                                                freeListArray=[dict mutableCopy];
+                                                                
+                                                             NSLog(@"array-=-=-- %@", freeListArray);
+                                                                [self settile];
+                                                            }
+                                                            
+                                                        }];
+        
+        [dataTask resume];
+       
+    });
+    
+ 
+    
+    
+    if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+    {
+        freeLabel.text = [NSString freeF];
+    }
+    else
+    {
+        freeLabel.text = [NSString freeD];
+    }
+    
+    //    sender.selected=YES;
+    //
+    //    NSError *error=nil;
+    //
+    //    NSString *urlString1 = [NSString stringWithFormat:@"%@checkstat.php?id=%@&status=F",APPS_DOMAIN_URL,[[copyArray objectAtIndex:sender.tag]objectForKey:@"id"]];
+    //
+    //    NSLog(@"urlString1%@",urlString1);
+    //
+    //    NSURL *requestURL1 = [NSURL URLWithString:urlString1];
+    //    NSString* urlTextEscaped = [urlString1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //    NSData *signeddataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlTextEscaped]options:NSDataReadingUncached error:&error];
+    //    NSString *serverOutput = [[NSString alloc] initWithData:signeddataURL encoding: NSASCIIStringEncoding];
+    //
+    //
+    //
+    //    NSString *urlString;
+    //
+    //    urlString = [NSString stringWithFormat:@"%@arrived_list.php?room_id=%@&admin_id=%@",APPS_DOMAIN_URL,pageId,[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"]];
+    //
+    //
+    //
+    //    NSLog(@" %@",urlString);
+    //    NSURL *requestURL = [NSURL URLWithString:urlString];
+    //
+    //    NSLog(@"%@", urlString);
+    //    NSData *signeddataURL1 =  [NSData dataWithContentsOfURL:requestURL options:NSDataReadingUncached error:&error];
+    //
+    //    NSMutableDictionary *result = [NSJSONSerialization
+    //                                   JSONObjectWithData:signeddataURL1 //1
+    //
+    //                                   options:kNilOptions
+    //                                   error:&error];
+    //    [copyArray removeAllObjects];
+    //    [data_retrived removeAllObjects];
+    //    for(NSMutableDictionary *dict in result)
+    //    {
+    //        [data_retrived addObject:dict];
+    //        
+    //    }
+    //    copyArray = [data_retrived mutableCopy];
+    //    [FindUser reloadData];
+    
+    
+    
+    
+}
+-(void)settile
+{
+    
+    for(int k = 0; k< freeListArray.count ; k++)
+    {
+        count = k % 2;
+        divide = k/ 2.0f;
+        
+        UIButton *freecheckbutton = [[UIButton alloc]init];
+        [freecheckbutton setFrame:CGRectMake((18+170)*count+25, (30*divide)+77, 15, 15)];
+        [freecheckbutton setBackgroundColor:[UIColor clearColor]];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximage"] forState:UIControlStateNormal];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximageselected"] forState:UIControlStateHighlighted];
+        [freecheckbutton setImage:[UIImage imageNamed:@"CheckBoximageselected"] forState:UIControlStateSelected];
+        [freeScrollView addSubview:freecheckbutton];
+        
+        UIButton *freecheckbuttonLabel = [[UIButton alloc]init];
+        [freecheckbuttonLabel setFrame:CGRectMake((18+170)*count+25+20, (30*divide)+70, 100, 30)];
+        [freecheckbuttonLabel setBackgroundColor:[UIColor clearColor]];
+        [freecheckbuttonLabel setTitle:[freeListArray objectAtIndex:k] forState:UIControlStateNormal];
+        [freecheckbuttonLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [freecheckbuttonLabel.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [freeScrollView addSubview:freecheckbuttonLabel];
+    }
+   
+    
+    UIButton *frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
+    [frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    frombutton.layer.borderWidth = 1.0f;
+    frombutton.layer.cornerRadius = 4.0f;
+    frombutton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:frombutton];
+    
+    UIButton *toButton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+160, 310, 40)];
+    [toButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [toButton.titleLabel setFont:[UIFont systemFontOfSize:19]];
+    toButton.layer.borderWidth = 1.0f;
+    toButton.layer.cornerRadius = 4.0f;
+    toButton.layer.borderColor = [[UIColor grayColor] CGColor];
+    [freeScrollView addSubview:toButton];
+    
+    if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+    {
+        [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+        [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+        [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+    }
+    
+    UIButton *defaultbutton = [[UIButton alloc]init];
+    [defaultbutton setFrame:CGRectMake(25, (30*divide)+215, 110, 40)];
+    [defaultbutton setBackgroundColor:[UIColor colorWithRed:(101.0f/255.0f) green:(210.0f/255.0f) blue:(252.0f/255.0f) alpha:1.0f]];
+    [defaultbutton setTitle:@"Frí Í dag" forState:UIControlStateNormal];
+    [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateHighlighted];
+    [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateSelected];
+    defaultbutton.layer.cornerRadius = 4.0f;
+    [defaultbutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [freeScrollView addSubview:defaultbutton];
+    
+    UIButton *savebutton = [[UIButton alloc]init];
+    [savebutton setFrame:CGRectMake(18+160+25+20, (30*divide)+215, 110, 40)];
+    [savebutton setBackgroundColor:[UIColor colorWithRed:(101.0f/255.0f) green:(210.0f/255.0f) blue:(252.0f/255.0f) alpha:1.0f]];
+    [savebutton setTitle:@"Ok" forState:UIControlStateNormal];
+    [savebutton setTitle:@"Ok" forState:UIControlStateHighlighted];
+    [savebutton setTitle:@"Ok" forState:UIControlStateSelected];
+    savebutton.layer.cornerRadius = 4.0f;
+    [savebutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [freeScrollView addSubview:savebutton];
+    
+    NSLog(@"-=-=-=- %d", divide);
+    
+     freeScrollView.contentSize = CGSizeMake(0,  (30*divide)+70+250);
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

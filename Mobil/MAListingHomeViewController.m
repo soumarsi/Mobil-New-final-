@@ -614,6 +614,14 @@
         }
     }
     
+    UILabel *arriveTime = [[UILabel alloc]initWithFrame:CGRectMake(570, 50, 140, 20)];
+    [arriveTime setBackgroundColor:[UIColor clearColor]];
+    [arriveTime setText:[NSString stringWithFormat:@"Arrived:%@",[[copyArray objectAtIndex:indexPath.row]objectForKey:@"child_entry_time" ]]];
+    [arriveTime setTextAlignment:NSTextAlignmentCenter];
+    [arriveTime setTextColor:[UIColor blackColor]];
+    [arriveTime setFont:[UIFont systemFontOfSize:17]];
+    [cell addSubview:arriveTime];
+    
     //if([pageId  isEqual: @"28"]){
     
     if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"sleep_status"] isEqualToString:@"S"])
@@ -621,7 +629,7 @@
 
     
     UIButton *sovi = [UIButton buttonWithType:UIButtonTypeCustom];
-    sovi.frame = CGRectMake(580, 52, 100, 80/2);
+    sovi.frame = CGRectMake(580, 72, 100, 80/2);
     sovi.backgroundColor = [UIColor clearColor];
     [sovi setTitleColor:[UIColor colorWithRed:(95.0f/255.0f) green:(171.0f/255.0f) blue:(222.0f/255.0f) alpha:1] forState:UIControlStateNormal];
     sovi.tag=indexPath.row;
@@ -662,6 +670,25 @@
         else
         {
                     spl.text = @"Sover nu";
+        }
+        
+    }
+    else  if( [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"second_sleep_time_stop"]  isEqual: @"00:00:00"] && ![[[copyArray objectAtIndex:indexPath.row]objectForKey:@"second_sleep_time_start"]  isEqual: @"00:00:00"] ){
+        
+        NSLog(@"under sleep");
+        
+        UILabel *spl = [[UILabel alloc] initWithFrame:CGRectMake(610, 115, 120, 41/2)];
+        spl.font = [UIFont fontWithName:GLOBALTEXTFONT_Light size:14];;
+        spl.textColor = [UIColor redColor];
+        spl.textAlignment = NSTextAlignmentLeft;
+        [cell addSubview:spl];
+        if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
+        {
+            spl.text = @"Svevur nú";
+        }
+        else
+        {
+            spl.text = @"Sover nu";
         }
         
     }

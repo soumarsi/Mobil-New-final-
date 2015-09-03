@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MAListngKominViewController : UIViewController<UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,UISearchDisplayDelegate,UITextViewDelegate>{
+@interface MAListngKominViewController : UIViewController<UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,UISearchDisplayDelegate,UITextViewDelegate,UIScrollViewDelegate,NSURLSessionDelegate>{
 
 
-    UIView *mainView;
+    UIView *mainView,*pickerBack1,*DeatilsView1;
     UIView *topView;
     NSUserDefaults * prefs;
-    UIButton *leftmenuBt;
+    UIButton *leftmenuBt,*okCls1;
     UILabel *CmntLBL;
     NSMutableArray *data_retrived;
     UITableViewCell *cell;
@@ -35,7 +35,12 @@
     NSMutableArray *ChildDateList;
     UIButton *comment;
     UIButton *broytbutton;
-    UIButton *slettabutton,*slettanote;
+    UIButton *slettabutton,*slettanote,*startTime,*endTime,*strtTm,*endtTm;
+    
+    UIView *freeBlackView,*freeScrollBackView;;
+    UIScrollView *freeScrollView;
+    NSMutableArray *freeListArray;
+    int count,divide;
 }
 @property (nonatomic) NSString *pageId;
 @end

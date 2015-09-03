@@ -473,9 +473,9 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"indexpath--- %ld--=-=--=--= %@", [[_globalArray objectAtIndex:indexPath.row] count],[_globalArray objectAtIndex:indexPath.row]);
+
     
-    return [[_globalArray objectAtIndex:indexPath.row] count]*20+180;
+    return [[_globalArray objectAtIndex:indexPath.row] count]*30+180;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -483,7 +483,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [copyArray count];
-    
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -498,7 +497,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     
-    backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 798-60, [[_globalArray objectAtIndex:indexPath.row] count]*20+170)];
+    backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 798-60, [[_globalArray objectAtIndex:indexPath.row] count]*30+170)];
     backView.backgroundColor = [UIColor whiteColor];
     [cell addSubview:backView];
     
