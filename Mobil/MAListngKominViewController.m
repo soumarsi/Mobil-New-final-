@@ -2873,7 +2873,63 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
 }
 -(void)saveFree:(UIButton *)sender
 {
+    NSString *fromdatelabel,*enddatelabel;
     
+    NSLog(@">>>>>>>>>> %@ &&&&&& %@  &&&&&&& %@",joinedString,_frombutton.titleLabel.text,_toButton.titleLabel.text);
+    
+    if ([_frombutton.titleLabel.text isEqualToString:@"Fra dato"] && [_toButton.titleLabel.text isEqualToString:@"Til Dato"] && joinedString.length==0 )
+    {
+        NSLog(@"1111111111");
+    }
+    else
+    {
+    
+        if (joinedString.length == 0) {
+            
+            joinedString = @"";
+        }
+        if ([_frombutton.titleLabel.text isEqualToString:@"Fra dato"])
+        {
+            fromdatelabel = @"";
+        }
+        else
+        {
+            fromdatelabel = _frombutton.titleLabel.text;
+        }
+        if ([_toButton.titleLabel.text isEqualToString:@"Til Dato"])
+        {
+            enddatelabel = @"";
+        }
+        else
+        {
+            enddatelabel = _toButton.titleLabel.text;
+        }
+    NSString *urlString;
+    
+    urlString = [NSString stringWithFormat:@"%@freebyworker.php?subAdminId=%@&room_id=%@&children_id=%@&FromFree=%@&ToFree=%@&removeFromFree=%@",APPS_DOMAIN_URL,[[NSUserDefaults standardUserDefaults]objectForKey:@"adminid"],[[NSUserDefaults standardUserDefaults]objectForKey:@"pageid"],[[copyArray objectAtIndex:sender.tag]objectForKey:@"id"],fromdatelabel,enddatelabel,joinedString];
+    
+    
+    NSLog(@" %@",urlString);
+    NSURL *requestURL = [NSURL URLWithString:urlString];
+    NSError* error = nil;
+    NSLog(@"%@", urlString);
+    NSData *signeddataURL =  [NSData dataWithContentsOfURL:requestURL options:NSDataReadingUncached error:&error];
+    
+   // id result = [NSJSONSerialization JSONObjectWithData:signeddataURL  options:kNilOptions error:&error];
+    
+    
+    NSString *str = [[NSString alloc]initWithData:signeddataURL encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"# # # >> >>>> >>>>> %@",str);
+    
+    if ([str isEqualToString:@"success"] || [str isEqualToString:@"successsuccess"] )
+    {
+        [self Crossfree];
+        
+        [self viewDidAppear:YES];
+    }
+    
+    }
 }
 -(void)freecheckAction:(UIButton *)sender
 {
@@ -2896,7 +2952,8 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         [listcheckarray addObject:[freeListArray objectAtIndex:sender.tag]];
    
     }
-    NSString *joinedString = [listcheckarray componentsJoinedByString:@","];
+    
+    joinedString = [listcheckarray componentsJoinedByString:@","];
        NSLog(@"listarray-=-=- %@", joinedString);
 }
 - (void)didReceiveMemoryWarning

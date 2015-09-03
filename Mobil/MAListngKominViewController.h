@@ -45,7 +45,8 @@
     //-//
     
     UIButton *defaultbutton;
-    int childid;
+    long childid;
+    NSString *joinedString;
 }
 @property (nonatomic) NSString *pageId;
 @property (nonatomic, strong) UIView *blackView;
