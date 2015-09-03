@@ -2580,21 +2580,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     _toButton.layer.borderColor = [[UIColor grayColor] CGColor];
     [freeScrollView addSubview:_toButton];
 
-    frombutton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+105, 310, 40)];
-    [frombutton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [frombutton.titleLabel setFont:[UIFont systemFontOfSize:19]];
-    frombutton.layer.borderWidth = 1.0f;
-    frombutton.layer.cornerRadius = 4.0f;
-    frombutton.layer.borderColor = [[UIColor grayColor] CGColor];
-    [freeScrollView addSubview:frombutton];
-    
-    toButton = [[UIButton alloc]initWithFrame:CGRectMake(25, (30*divide)+160, 310, 40)];
-    [toButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [toButton.titleLabel setFont:[UIFont systemFontOfSize:19]];
-    toButton.layer.borderWidth = 1.0f;
-    toButton.layer.cornerRadius = 4.0f;
-    toButton.layer.borderColor = [[UIColor grayColor] CGColor];
-    [freeScrollView addSubview:toButton];
 
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
@@ -2845,13 +2830,17 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         
         if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
         {
-            [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-            [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"" forState:UIControlStateNormal];
+            [_toButton setTitle:@"" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+            [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
         }
         else
         {
-            [frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-            [toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"" forState:UIControlStateNormal];
+            [_toButton setTitle:@"" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
+            [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
         }
 
     }
@@ -2868,8 +2857,11 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         
         NSLog(@">>>>>>>>>>> %@",stringFromDate);
         
-        [frombutton setTitle:stringFromDate forState:UIControlStateNormal];
-        [toButton setTitle:stringFromDate forState:UIControlStateNormal];
+        [_frombutton setTitle:@"" forState:UIControlStateNormal];
+        [_toButton setTitle:@"" forState:UIControlStateNormal];
+        
+        [_frombutton setTitle:stringFromDate forState:UIControlStateNormal];
+        [_toButton setTitle:stringFromDate forState:UIControlStateNormal];
         
     }
 }
