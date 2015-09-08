@@ -720,7 +720,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     [checkbox1 setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [checkbox1 setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
     checkbox1.tag = indexPath.row;
-    //[checkbox1 setBackgroundColor:[UIColor redColor]];
     [checkbox1 setImage:[UIImage imageNamed:@"chknr"] forState:UIControlStateNormal];
     [checkbox1 setImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateHighlighted];
     [checkbox1 setImage:[UIImage imageNamed:@"chksel"] forState:UIControlStateSelected];
@@ -747,6 +746,39 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
         [backView addSubview:fri_Label];
     }
+        else
+        {
+            if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] isEqualToString:@"0000-00-00"] && [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"] isEqualToString:@"0000-00-00"]) {
+                
+            }
+           else if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] isEqualToString:[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"]]) {
+             
+               
+               UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+               [fri_Label setBackgroundColor:[UIColor clearColor]];
+               [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+               fri_Label.tag = indexPath.row;
+               [fri_Label setTextAlignment:NSTextAlignmentCenter];
+               [fri_Label setTextColor:[UIColor redColor]];
+               [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+               [backView addSubview:fri_Label];
+            }
+            else
+            {
+            NSArray *arr = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] componentsSeparatedByString:@"-"];
+            NSArray *arr1 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"] componentsSeparatedByString:@"-"];
+            
+            UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+            [fri_Label setBackgroundColor:[UIColor clearColor]];
+            [fri_Label setText:[NSString stringWithFormat:@"%@-%@-%@ -- %@-%@-%@",[arr objectAtIndex:2],[arr objectAtIndex:1],[arr objectAtIndex:0],[arr1 objectAtIndex:2],[arr1 objectAtIndex:1],[arr1 objectAtIndex:0]]];
+            fri_Label.tag = indexPath.row;
+            [fri_Label setTextAlignment:NSTextAlignmentCenter];
+            [fri_Label setTextColor:[UIColor redColor]];
+            [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+            [backView addSubview:fri_Label];
+            }
+        }
+        
 }
     
     
@@ -782,6 +814,21 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         }
         else
         {
+            
+            if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] isEqualToString:[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"]]) {
+                
+                
+                UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+                [fri_Label setBackgroundColor:[UIColor clearColor]];
+                [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+                fri_Label.tag = indexPath.row;
+                [fri_Label setTextAlignment:NSTextAlignmentCenter];
+                [fri_Label setTextColor:[UIColor redColor]];
+                [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+                [backView addSubview:fri_Label];
+            }
+            else
+            {
             NSArray *arr = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] componentsSeparatedByString:@"-"];
             NSArray *arr1 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"] componentsSeparatedByString:@"-"];
             
@@ -793,13 +840,45 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             [fri_Label setTextColor:[UIColor redColor]];
             [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
             [backView addSubview:fri_Label];
-            
+         }
              [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+
         }
     }
         else
         {
-              [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+            if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] isEqualToString:@"0000-00-00"])
+            {
+               [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] isEqualToString:[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"]]) {
+                
+                
+                UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+                [fri_Label setBackgroundColor:[UIColor clearColor]];
+                [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+                fri_Label.tag = indexPath.row;
+                [fri_Label setTextAlignment:NSTextAlignmentCenter];
+                [fri_Label setTextColor:[UIColor redColor]];
+                [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+                [backView addSubview:fri_Label];
+            }
+            else
+            {
+                NSArray *arr = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_mindt"] componentsSeparatedByString:@"-"];
+                NSArray *arr1 = [[[copyArray objectAtIndex:indexPath.row]objectForKey:@"free_maxdt"] componentsSeparatedByString:@"-"];
+                
+                UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
+                [fri_Label setBackgroundColor:[UIColor clearColor]];
+                [fri_Label setText:[NSString stringWithFormat:@"%@-%@-%@ -- %@-%@-%@",[arr objectAtIndex:2],[arr objectAtIndex:1],[arr objectAtIndex:0],[arr1 objectAtIndex:2],[arr1 objectAtIndex:1],[arr1 objectAtIndex:0]]];
+                fri_Label.tag = indexPath.row;
+                [fri_Label setTextAlignment:NSTextAlignmentCenter];
+                [fri_Label setTextColor:[UIColor redColor]];
+                [fri_Label setFont:[UIFont fontWithName:GLOBALTEXTFONT_Light size:15]];
+                [backView addSubview:fri_Label];
+                
+                [checkbox_Fri addTarget:self action:@selector(bto_actionFri:) forControlEvents:UIControlEventTouchUpInside];
+            }
         }
     
 
@@ -1349,9 +1428,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             [mainView addSubview:okCls];
             [mainView bringSubviewToFront:okCls];
             
-            
-            
-            
             DeatilsView = [[UIView alloc] initWithFrame:CGRectMake(150, 160, 490, 250)];
             DeatilsView.backgroundColor = [UIColor whiteColor];
             [mainView addSubview:DeatilsView];
@@ -1371,7 +1447,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             Broyt.titleLabel.font = [UIFont systemFontOfSize:15];
             [Broyt addTarget:self action:@selector(Broyt:) forControlEvents:UIControlEventTouchUpInside];
             [DeatilsView addSubview:Broyt];
-            
             
             UILabel *ttPOP = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 200, 35)];
             ttPOP.backgroundColor = [UIColor clearColor];
@@ -1393,7 +1468,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                 CoemtText2.text = [[copyArray objectAtIndex:sender.tag]objectForKey:@"note"];
                 
             }
-            
             CoemtText2.editable = NO;
             CoemtText2.delegate = self;
             CoemtText2.textAlignment = NSTextAlignmentLeft;
@@ -1412,9 +1486,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             slettanote.titleLabel.font = [UIFont systemFontOfSize:15];
             [slettanote addTarget:self action:@selector(Selltenote:) forControlEvents:UIControlEventTouchUpInside];
             [DeatilsView addSubview:slettanote];
-            
         }
-
     }
 }
 -(void)Selltenote:(UIButton *)sender
@@ -1440,7 +1512,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     {
         [self viewDidAppear:YES];
     }
-    
 }
 -(void)comment:(UIButton *)sender
 {
@@ -2914,9 +2985,6 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     NSError* error = nil;
     NSLog(@"%@", urlString);
     NSData *signeddataURL =  [NSData dataWithContentsOfURL:requestURL options:NSDataReadingUncached error:&error];
-    
-   // id result = [NSJSONSerialization JSONObjectWithData:signeddataURL  options:kNilOptions error:&error];
-    
     
     NSString *str = [[NSString alloc]initWithData:signeddataURL encoding:NSUTF8StringEncoding];
     
