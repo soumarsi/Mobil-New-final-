@@ -756,7 +756,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                
                UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
                [fri_Label setBackgroundColor:[UIColor clearColor]];
-               [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+               [fri_Label setText:[NSString stringWithFormat:@"Frí í dag"]];
                fri_Label.tag = indexPath.row;
                [fri_Label setTextAlignment:NSTextAlignmentCenter];
                [fri_Label setTextColor:[UIColor redColor]];
@@ -820,7 +820,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                 
                 UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
                 [fri_Label setBackgroundColor:[UIColor clearColor]];
-                [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+                [fri_Label setText:[NSString stringWithFormat:@"Frí í dag"]];
                 fri_Label.tag = indexPath.row;
                 [fri_Label setTextAlignment:NSTextAlignmentCenter];
                 [fri_Label setTextColor:[UIColor redColor]];
@@ -856,7 +856,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
                 
                 UILabel *fri_Label = [[UILabel alloc]initWithFrame:CGRectMake(560, 83, 180, 20)];
                 [fri_Label setBackgroundColor:[UIColor clearColor]];
-                [fri_Label setText:[NSString stringWithFormat:@"Free Í dag"]];
+                [fri_Label setText:[NSString stringWithFormat:@"Frí í dag"]];
                 fri_Label.tag = indexPath.row;
                 [fri_Label setTextAlignment:NSTextAlignmentCenter];
                 [fri_Label setTextColor:[UIColor redColor]];
@@ -2659,21 +2659,21 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"lang"] isEqualToString:@"fo"])
     {
-        [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-        [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        [_frombutton setTitle:@"Frá dato" forState:UIControlStateNormal];
+        [_toButton setTitle:@"Til dato" forState:UIControlStateNormal];
     }
     else
     {
-        [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-        [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+        [_frombutton setTitle:@"Frá dato" forState:UIControlStateNormal];
+        [_toButton setTitle:@"Til dato" forState:UIControlStateNormal];
     }
     
     defaultbutton = [[UIButton alloc]init];
     [defaultbutton setFrame:CGRectMake(25, (30*divide)+215, 110, 40)];
     [defaultbutton setBackgroundColor:[UIColor colorWithRed:(101.0f/255.0f) green:(210.0f/255.0f) blue:(252.0f/255.0f) alpha:1.0f]];
-    [defaultbutton setTitle:@"Frí Í dag" forState:UIControlStateNormal];
-    [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateHighlighted];
-    [defaultbutton setTitle:@"Not Frí Í dag" forState:UIControlStateSelected];
+    [defaultbutton setTitle:@"Frí í dag" forState:UIControlStateNormal];
+    [defaultbutton setTitle:@"Ikki frí í dag" forState:UIControlStateHighlighted];
+    [defaultbutton setTitle:@"Ikki frí í dag" forState:UIControlStateSelected];
     defaultbutton.layer.cornerRadius = 4.0f;
     [defaultbutton addTarget:self action:@selector(Default_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [defaultbutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -2909,15 +2909,15 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         {
             [_frombutton setTitle:@"" forState:UIControlStateNormal];
             [_toButton setTitle:@"" forState:UIControlStateNormal];
-            [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-            [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"Frá dato" forState:UIControlStateNormal];
+            [_toButton setTitle:@"Til dato" forState:UIControlStateNormal];
         }
         else
         {
             [_frombutton setTitle:@"" forState:UIControlStateNormal];
             [_toButton setTitle:@"" forState:UIControlStateNormal];
-            [_frombutton setTitle:@"Fra dato" forState:UIControlStateNormal];
-            [_toButton setTitle:@"Til Dato" forState:UIControlStateNormal];
+            [_frombutton setTitle:@"Frá dato" forState:UIControlStateNormal];
+            [_toButton setTitle:@"Til dato" forState:UIControlStateNormal];
         }
 
     }
@@ -2948,7 +2948,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
     
     NSLog(@">>>>>>>>>> %@ &&&&&& %@  &&&&&&& %@",joinedString,_frombutton.titleLabel.text,_toButton.titleLabel.text);
     
-    if ([_frombutton.titleLabel.text isEqualToString:@"Fra dato"] && [_toButton.titleLabel.text isEqualToString:@"Til Dato"] && joinedString.length==0 )
+    if ([_frombutton.titleLabel.text isEqualToString:@"Frá dato"] && [_toButton.titleLabel.text isEqualToString:@"Til dato"] && joinedString.length==0 )
     {
         NSLog(@"1111111111");
     }
@@ -2959,7 +2959,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
             
             joinedString = @"";
         }
-        if ([_frombutton.titleLabel.text isEqualToString:@"Fra dato"])
+        if ([_frombutton.titleLabel.text isEqualToString:@"Frá dato"])
         {
             fromdatelabel = @"";
         }
@@ -2967,7 +2967,7 @@ NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[
         {
             fromdatelabel = _frombutton.titleLabel.text;
         }
-        if ([_toButton.titleLabel.text isEqualToString:@"Til Dato"])
+        if ([_toButton.titleLabel.text isEqualToString:@"Til dato"])
         {
             enddatelabel = @"";
         }
